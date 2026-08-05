@@ -1,0 +1,45 @@
+{
+  "name": "OutAtlas",
+  "short_name": "OutAtlas",
+  "version": "2.0.1",
+  "id": "/OutAtlasAPP/",
+  "start_url": "/OutAtlasAPP/index.html",
+  "scope": "/OutAtlasAPP/",
+  "display": "standalone",
+  "display_override": ["standalone", "window-controls-overlay"],
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "description": "OutAtlas was created to make travel planning safer, easier, and more empowering for the LGBTQ community. Explore by region or country to discover welcoming destinations with curated listings for hotels, tours, and nightlife.",
+  "dir": "auto",
+  "lang": "en-US",
+  "categories": ["travel", "lifestyle"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Hotels",
+      "short_name": "Hotels",
+      "url": "/OutAtlasAPP/index.html#hotels",
+      "description": "Find LGBTQ+ friendly hotels"
+    },
+    {
+      "name": "Upcoming Events",
+      "short_name": "Events",
+      "url": "/OutAtlasAPP/index.html#events",
+      "description": "View LGBTQ+ events and pride dates"
+    }
+  ]
+}
