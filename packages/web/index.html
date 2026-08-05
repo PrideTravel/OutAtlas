@@ -1165,11 +1165,7 @@
     <!-- User menu button (rendered by JS) -->
     <div id="ps-user-menu-wrap"></div>
 
-    <!-- Firebase SDK (compat) — loaded here (not in <head>) to avoid blocking initial render -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <!-- Firebase loaded via npm — see packages/extension/src/firebase.js -->
 
     <script>
         (function () {
