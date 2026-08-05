@@ -1546,7 +1546,7 @@ document.head.appendChild(_faStyle);
                 } else {
                     try {
                         console.log('[OutAtlas] Fetching destinations.json...');
-                        const response = await fetch('destinations.json');
+                        const response = await fetch(chrome.runtime.getURL('destinations.json'));
                         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                         data = await response.json();
                     } catch (error) {
