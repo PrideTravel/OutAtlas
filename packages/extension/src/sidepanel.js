@@ -1,6 +1,8 @@
 // OutAtlas Side Panel — extracted from index.html (Phase 1.5)
 import '@fontsource/outfit';
+import './styles/sidepanel-responsive.css';
 import { auth, db } from './firebase.js';
+import { store, initStorage } from './storage.js';
 
 
 /* Font Awesome 6.4.0 — local webfonts */
@@ -70,7 +72,7 @@ document.head.appendChild(_faStyle);
            ============================================================================ */
         function getSavedTheme() {
             // Check if user has manually saved a theme preference
-            const saved = localStorage.getItem(THEME_CONFIG.STORAGE_KEY);
+            const saved = store.getSync(THEME_CONFIG.STORAGE_KEY);
             if (saved) {
                 return saved;
             }
@@ -139,8 +141,8 @@ document.head.appendChild(_faStyle);
                 document.documentElement.style.colorScheme = 'light';
             }
 
-            // Save theme preference to localStorage for persistence across sessions
-            localStorage.setItem(THEME_CONFIG.STORAGE_KEY, theme);
+            // Save theme preference to chrome.storage.local for persistence across sessions
+            store.set(THEME_CONFIG.STORAGE_KEY, theme);
 
             // Log the theme change to console for debugging
             console.log(`Theme changed to: ${theme} (${themeClass})`);
@@ -153,7 +155,7 @@ document.head.appendChild(_faStyle);
            Cycle Theme - Toggle between Clear View, Light, and Dark modes
            ============================================================================ */
         function cycleTheme() {
-            const currentTheme = localStorage.getItem(THEME_CONFIG.STORAGE_KEY) || 'clear';
+            const currentTheme = store.getSync(THEME_CONFIG.STORAGE_KEY) || 'clear';
             const themes = ['clear', 'light', 'dark'];
             const currentIndex = themes.indexOf(currentTheme);
             const nextTheme = themes[(currentIndex + 1) % themes.length];
@@ -192,7 +194,7 @@ document.head.appendChild(_faStyle);
            ============================================================================ */
         function applyAccessibilitySettings() {
             // Check for reduced motion preference
-            const reduceMotion = localStorage.getItem(THEME_CONFIG.REDUCE_MOTION_KEY) === 'true' ||
+            const reduceMotion = store.getSync(THEME_CONFIG.REDUCE_MOTION_KEY) === 'true' ||
                 window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             if (reduceMotion) {
@@ -201,7 +203,7 @@ document.head.appendChild(_faStyle);
             }
 
             // Check for high contrast preference
-            const highContrast = localStorage.getItem(THEME_CONFIG.HIGH_CONTRAST_KEY) === 'true' ||
+            const highContrast = store.getSync(THEME_CONFIG.HIGH_CONTRAST_KEY) === 'true' ||
                 window.matchMedia('(prefers-contrast: more)').matches;
 
             if (highContrast) {
@@ -220,7 +222,7 @@ document.head.appendChild(_faStyle);
             // Listen for dark mode preference changes
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
                 // Only auto-switch if user hasn't manually set a theme
-                const hasUserPreference = localStorage.getItem(THEME_CONFIG.STORAGE_KEY);
+                const hasUserPreference = store.getSync(THEME_CONFIG.STORAGE_KEY);
                 if (!hasUserPreference) {
                     const newTheme = e.matches ? 'dark' : 'light';
                     setTheme(newTheme);
@@ -266,13 +268,14 @@ document.head.appendChild(_faStyle);
         window.cycleTheme = cycleTheme;
         window.updateThemeSelection = updateThemeSelection;
 
-        // Initialize theme system when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeThemeSystem);
-        } else {
-            // If script runs after DOMContentLoaded
-            initializeThemeSystem();
-        }
+        // Populate chrome.storage.local cache then initialize theme
+        initStorage().then(() => {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeThemeSystem);
+            } else {
+                initializeThemeSystem();
+            }
+        });
 
 // ── extracted script block ──────────────────────────────────────────────
 (function () {
@@ -498,17 +501,36 @@ document.head.appendChild(_faStyle);
                     errEl.textContent = (e.message || '').replace('Firebase: ', '').replace(/ \(auth\/[^)]+\)/, '');
                 }
             };
+            // NOTE: signInWithPopup is blocked in MV3 Side Panels.
+            // Phase 2.4: replaced with chrome.identity + Cloud Function bridge.
+            // The Cloud Function (chromeAuthToken) verifies the Google token and
+            // returns a Firebase custom token. See checklist task 3.4 for setup.
             window.psGoogleSignIn = async function () {
-                const provider = new firebase.auth.GoogleAuthProvider();
+                const errEl = document.getElementById('ps-auth-error');
                 try {
-                    const cred = await auth.signInWithPopup(provider);
-                    await db.collection('users').doc(cred.user.uid).set({
+                    const googleToken = await new Promise((resolve, reject) => {
+                        chrome.identity.getAuthToken({ interactive: true }, token => {
+                            if (chrome.runtime.lastError) reject(new Error(chrome.runtime.lastError.message));
+                            else resolve(token);
+                        });
+                    });
+                    // Exchange Google OAuth token for Firebase custom token via Cloud Function
+                    const fnRes = await fetch(
+                        'https://us-central1-pride-scout-26f4e.cloudfunctions.net/chromeAuthToken',
+                        { method: 'POST', headers: { Authorization: `Bearer ${googleToken}` } }
+                    );
+                    if (!fnRes.ok) throw new Error('Auth bridge error: ' + fnRes.status);
+                    const { customToken } = await fnRes.json();
+                    const { signInWithCustomToken } = await import('firebase/auth');
+                    const cred = await signInWithCustomToken(auth, customToken);
+                    const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+                    await setDoc(doc(db, 'users', cred.user.uid), {
                         email: cred.user.email, displayName: cred.user.displayName || '',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        createdAt: serverTimestamp()
                     }, { merge: true });
                     psCloseModal();
                 } catch (e) {
-                    document.getElementById('ps-auth-error').textContent = (e.message || '').replace('Firebase: ', '').replace(/ \(auth\/[^)]+\)/, '');
+                    if (errEl) errEl.textContent = e.message || 'Sign-in failed';
                 }
             };
             window.psSignOut = async function () {
@@ -890,14 +912,12 @@ document.head.appendChild(_faStyle);
                 lines.push('Generated by OutAtlas - TravelinPride.com');
 
                 const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'trip-' + dest.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.txt';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+                const blobUrl = URL.createObjectURL(blob);
+                const filename = 'outatlas-trip-' + dest.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.txt';
+                // Use chrome.downloads API (required in MV3 Side Panel — <a download> is blocked)
+                chrome.downloads.download({ url: blobUrl, filename }, () => {
+                    URL.revokeObjectURL(blobUrl);
+                });
             };
 
             window.psTripMap = async function(docId) {
@@ -3626,7 +3646,7 @@ if (typeof navigator.serviceWorker !== 'undefined') {
         function updateReduceMotionCheckbox() {
             const checkbox = document.getElementById('reduceAnimations');
             const preferReduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const savedPreference = localStorage.getItem('reduce-motion') === 'true';
+            const savedPreference = store.getSync('reduce-motion') === 'true';
 
             checkbox.checked = savedPreference || preferReduceMotion;
         }
@@ -3638,7 +3658,7 @@ if (typeof navigator.serviceWorker !== 'undefined') {
             const checkbox = document.getElementById('reduceAnimations');
             const isChecked = checkbox.checked;
 
-            localStorage.setItem('reduce-motion', isChecked ? 'true' : 'false');
+            store.set('reduce-motion', isChecked ? 'true' : 'false');
 
             if (isChecked) {
                 document.documentElement.style.setProperty('--transition-base', 'none');
@@ -3657,7 +3677,7 @@ if (typeof navigator.serviceWorker !== 'undefined') {
         function updateHighContrastCheckbox() {
             const checkbox = document.getElementById('highContrast');
             const preferHighContrast = window.matchMedia('(prefers-contrast: more)').matches;
-            const savedPreference = localStorage.getItem('high-contrast') === 'true';
+            const savedPreference = store.getSync('high-contrast') === 'true';
 
             checkbox.checked = savedPreference || preferHighContrast;
         }
@@ -3669,7 +3689,7 @@ if (typeof navigator.serviceWorker !== 'undefined') {
             const checkbox = document.getElementById('highContrast');
             const isChecked = checkbox.checked;
 
-            localStorage.setItem('high-contrast', isChecked ? 'true' : 'false');
+            store.set('high-contrast', isChecked ? 'true' : 'false');
 
             if (isChecked) {
                 document.body.classList.add('high-contrast');
