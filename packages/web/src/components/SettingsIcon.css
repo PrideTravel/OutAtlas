@@ -1,0 +1,337 @@
+/* ============================================================================
+   SETTINGS ICON STYLES
+   Accessible, beautiful styling for the SettingsIcon button component
+   Uses CSS variables for theme-aware styling
+   ============================================================================ */
+
+/* ============================================================================
+   CONTAINER
+   Wrapper for positioning the settings icon
+   ============================================================================ */
+
+.settings-icon-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================================
+   BASE STYLES
+   Default button appearance and positioning
+   ============================================================================ */
+
+.settings-icon {
+  /* Positioning */
+  position: relative;
+  z-index: 998;
+
+  /* Size */
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+
+  /* Appearance */
+  border-radius: var(--border-radius-full);
+  background-color: var(--brand-teal);
+  color: white;
+  border: 2px solid var(--brand-gold);
+
+  /* Typography */
+  font-size: 20px;
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  /* Interaction */
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+
+  /* Reset default button styles */
+  margin: 0;
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: baseline;
+
+  /* Accessibility */
+  -webkit-appearance: none;
+  appearance: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+/* ============================================================================
+   SVG ICON STYLES
+   Inner SVG icon styling
+   ============================================================================ */
+
+.settings-icon-svg {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  transition: transform var(--transition-base);
+}
+
+/* ============================================================================
+   A11Y BADGE
+   Shows when accessibility features are enabled
+   ============================================================================ */
+
+.a11y-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: var(--message-pink);
+  color: white;
+  padding: 2px 6px;
+  border-radius: var(--border-radius-full);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  border: 2px solid var(--bg-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================================
+   HOVER STATE
+   Enhanced visual feedback on hover
+   ============================================================================ */
+
+.settings-icon:hover {
+  /* Scale animation */
+  transform: scale(1.1);
+
+  /* Color swap */
+  background-color: var(--brand-gold);
+  color: var(--text-primary);
+
+  /* Enhanced shadow */
+  box-shadow: var(--shadow-lg);
+
+  /* Subtle lift effect */
+  border-color: var(--brand-teal);
+}
+
+.settings-icon:hover .settings-icon-svg {
+  transform: rotate(-20deg);
+}
+
+/* ============================================================================
+   ACTIVE STATE
+   Feedback when button is pressed
+   ============================================================================ */
+
+.settings-icon:active {
+  transform: scale(0.95);
+}
+
+.settings-icon:active .settings-icon-svg {
+  transform: rotate(0deg) scale(0.9);
+}
+
+/* ============================================================================
+   FOCUS STATE
+   Accessibility-focused outline for keyboard navigation
+   ============================================================================ */
+
+.settings-icon:focus {
+  outline: none;
+}
+
+.settings-icon:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+/* Dark mode focus styling */
+body.dark-mode .settings-icon:focus-visible {
+  outline-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   DISABLED STATE
+   Styling for disabled button (if needed in future)
+   ============================================================================ */
+
+.settings-icon:disabled {
+  opacity: var(--opacity-50);
+  cursor: not-allowed;
+  background-color: var(--text-tertiary);
+  border-color: var(--text-tertiary);
+}
+
+.settings-icon:disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================================
+   ACCESSIBILITY - REDUCED MOTION
+   Respect user's prefers-reduced-motion setting
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-icon {
+    transition: none;
+  }
+
+  .settings-icon-svg {
+    transition: none;
+  }
+
+  .settings-icon:hover {
+    transform: none;
+  }
+
+  .settings-icon:hover .settings-icon-svg {
+    transform: none;
+  }
+
+  .settings-icon:active {
+    transform: none;
+  }
+
+  .settings-icon:active .settings-icon-svg {
+    transform: none;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY - HIGH CONTRAST MODE
+   Enhanced styling for users who prefer high contrast
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  .settings-icon {
+    border-width: 3px;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .settings-icon:focus-visible {
+    outline-width: 4px;
+  }
+
+  .a11y-badge {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MOBILE
+   Adjust positioning and size for mobile devices
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .settings-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 18px;
+  }
+
+  .settings-icon-svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Very small devices */
+@media (max-width: 360px) {
+  .settings-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 16px;
+  }
+
+  .settings-icon-svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .a11y-badge {
+    font-size: 8px;
+    padding: 1px 4px;
+  }
+}
+
+/* ============================================================================
+   DARK MODE SPECIFIC STYLES
+   Enhanced styling when dark mode is active
+   ============================================================================ */
+
+body.dark-mode .settings-icon {
+  background-color: var(--brand-gold);
+  color: var(--text-primary);
+  border-color: var(--brand-teal);
+  box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .settings-icon:hover {
+  background-color: var(--brand-teal);
+  color: white;
+  border-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   TOUCH DEVICE OPTIMIZATION
+   Better spacing for touch interfaces
+   ============================================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .settings-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    font-size: 24px;
+  }
+
+  .settings-icon-svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .settings-icon:active {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   Hide settings icon when printing
+   ============================================================================ */
+
+@media print {
+  .settings-icon {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   SCREEN READER ONLY TEXT
+   Hide visually but keep in DOM for screen readers
+   ============================================================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

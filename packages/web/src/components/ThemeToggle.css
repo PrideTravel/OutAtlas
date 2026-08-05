@@ -1,0 +1,310 @@
+/* ============================================================================
+   THEME TOGGLE STYLES
+   Beautiful, accessible styling for the ThemeToggle button component
+   Uses CSS variables for theme-aware styling
+   ============================================================================ */
+
+/* ============================================================================
+   BASE STYLES
+   Default button appearance and positioning
+   ============================================================================ */
+
+.theme-toggle {
+  /* Positioning */
+  position: fixed;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 999;
+
+  /* Size */
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+
+  /* Appearance */
+  border-radius: var(--border-radius-full);
+  background-color: var(--brand-teal);
+  color: white;
+  border: 2px solid var(--brand-gold);
+
+  /* Typography */
+  font-size: 24px;
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Interaction */
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+
+  /* Reset default button styles */
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: baseline;
+
+  /* Accessibility */
+  -webkit-appearance: none;
+  appearance: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+/* ============================================================================
+   ICON STYLES
+   Inner emoji/icon styling
+   ============================================================================ */
+
+.theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: transform var(--transition-base);
+}
+
+/* ============================================================================
+   HOVER STATE
+   Enhanced visual feedback on hover
+   ============================================================================ */
+
+.theme-toggle:hover {
+  /* Scale animation */
+  transform: scale(1.1);
+
+  /* Color swap */
+  background-color: var(--brand-gold);
+  color: var(--text-primary);
+
+  /* Enhanced shadow */
+  box-shadow: var(--shadow-lg);
+
+  /* Subtle lift effect */
+  border-color: var(--brand-teal);
+}
+
+.theme-toggle:hover .theme-toggle-icon {
+  transform: rotate(20deg);
+}
+
+/* ============================================================================
+   ACTIVE STATE
+   Feedback when button is pressed
+   ============================================================================ */
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle:active .theme-toggle-icon {
+  transform: rotate(0deg) scale(0.9);
+}
+
+/* ============================================================================
+   FOCUS STATE
+   Accessibility-focused outline for keyboard navigation
+   ============================================================================ */
+
+.theme-toggle:focus {
+  outline: none;
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+/* Dark mode focus styling */
+body.dark-mode .theme-toggle:focus-visible {
+  outline-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   DISABLED STATE
+   Styling for disabled button (if needed in future)
+   ============================================================================ */
+
+.theme-toggle:disabled {
+  opacity: var(--opacity-50);
+  cursor: not-allowed;
+  background-color: var(--text-tertiary);
+  border-color: var(--text-tertiary);
+}
+
+.theme-toggle:disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================================
+   ACCESSIBILITY - REDUCED MOTION
+   Respect user's prefers-reduced-motion setting
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle {
+    transition: none;
+  }
+
+  .theme-toggle-icon {
+    transition: none;
+  }
+
+  .theme-toggle:hover {
+    transform: none;
+  }
+
+  .theme-toggle:hover .theme-toggle-icon {
+    transform: none;
+  }
+
+  .theme-toggle:active {
+    transform: none;
+  }
+
+  .theme-toggle:active .theme-toggle-icon {
+    transform: none;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY - HIGH CONTRAST MODE
+   Enhanced styling for users who prefer high contrast
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  .theme-toggle {
+    border-width: 3px;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .theme-toggle:focus-visible {
+    outline-width: 4px;
+  }
+
+  .theme-toggle:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MOBILE
+   Adjust positioning and size for mobile devices
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 20px;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+  }
+}
+
+/* Very small devices */
+@media (max-width: 360px) {
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 18px;
+  }
+}
+
+/* ============================================================================
+   DARK MODE SPECIFIC STYLES
+   Enhanced styling when dark mode is active
+   ============================================================================ */
+
+body.dark-mode .theme-toggle {
+  background-color: var(--brand-gold);
+  color: var(--text-primary);
+  border-color: var(--brand-teal);
+  box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .theme-toggle:hover {
+  background-color: var(--brand-teal);
+  color: white;
+  border-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   Keyframe animations for additional visual polish
+   ============================================================================ */
+
+@keyframes themeTogglePulse {
+  0% {
+    box-shadow: var(--shadow-md);
+  }
+
+  50% {
+    box-shadow: var(--shadow-lg);
+  }
+
+  100% {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+@keyframes themeToggleSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apply subtle pulse on hover */
+@media (prefers-reduced-motion: no-preference) {
+  .theme-toggle:hover {
+    animation: themeTogglePulse 0.6s ease-in-out;
+  }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   Hide theme toggle when printing
+   ============================================================================ */
+
+@media print {
+  .theme-toggle {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   TOUCH DEVICE OPTIMIZATION
+   Better spacing for touch interfaces
+   ============================================================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .theme-toggle {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    font-size: 28px;
+  }
+
+  .theme-toggle:active {
+    transform: scale(1);
+  }
+}

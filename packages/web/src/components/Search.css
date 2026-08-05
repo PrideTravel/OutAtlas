@@ -1,0 +1,556 @@
+/* ============================================================================
+   SEARCH COMPONENT STYLES
+   Enhanced typography, spacing, and accessibility for search page
+   ============================================================================ */
+
+.search-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+/* ============================================================================
+   SEARCH HEADER
+   Title and subtitle for search page
+   ============================================================================ */
+
+.search-header {
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+}
+
+.search-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-tight);
+  transition: color var(--transition-base);
+}
+
+.search-subtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: var(--line-height-normal);
+  transition: color var(--transition-base);
+  margin: 0;
+}
+
+/* ============================================================================
+   SEARCH FORM
+   Search input and submit button
+   ============================================================================ */
+
+.search-form {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-2xl);
+  flex-wrap: wrap;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  min-width: 250px;
+}
+
+.search-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+  transition: color var(--transition-base);
+}
+
+.search-input {
+  width: 100%;
+  height: 48px;
+  padding: var(--spacing-md);
+  font-size: var(--text-base);
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: border-color var(--transition-base), background-color var(--transition-base);
+}
+
+.search-input::placeholder {
+  color: var(--text-tertiary);
+  opacity: 0.7;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(56, 189, 153, 0.1);
+}
+
+body.dark-mode .search-input:focus {
+  box-shadow: 0 0 0 3px rgba(245, 192, 110, 0.1);
+}
+
+.search-button {
+  height: 48px;
+  padding: 0 var(--spacing-lg);
+  background-color: var(--brand-teal);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  transition: all var(--transition-base);
+  align-self: flex-end;
+}
+
+.search-button:hover {
+  background-color: var(--brand-teal);
+  opacity: 0.85;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.search-button:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+.search-button:active {
+  transform: translateY(0);
+}
+
+body.dark-mode .search-button:focus-visible {
+  outline-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   CATEGORY FILTERS
+   Filter buttons for category selection
+   ============================================================================ */
+
+.search-filters {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-2xl);
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-light);
+  border-radius: var(--border-radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.filter-button:hover {
+  border-color: var(--brand-teal);
+  background-color: rgba(56, 189, 153, 0.1);
+}
+
+.filter-button:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+.filter-button.active {
+  background-color: var(--brand-teal);
+  color: white;
+  border-color: var(--brand-teal);
+}
+
+body.dark-mode .filter-button:focus-visible {
+  outline-color: var(--brand-gold);
+}
+
+body.dark-mode .filter-button.active {
+  background-color: var(--brand-gold);
+  color: var(--text-primary);
+  border-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   SEARCH RESULTS
+   Results section with cards
+   ============================================================================ */
+
+.search-results {
+  min-height: 200px;
+}
+
+.search-empty {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-light);
+}
+
+.search-empty-text {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.results-count {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  transition: color var(--transition-base);
+}
+
+/* ============================================================================
+   RESULT CARDS
+   Individual result cards with enhanced readability
+   ============================================================================ */
+
+.result-card {
+  padding: var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.result-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand-teal);
+}
+
+body.dark-mode .result-card {
+  box-shadow: var(--shadow-md);
+}
+
+.result-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.result-title {
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  flex: 1;
+  min-width: 250px;
+  transition: color var(--transition-base);
+}
+
+.result-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-destination {
+  background-color: var(--brand-teal);
+  color: white;
+}
+
+.badge-hotel {
+  background-color: var(--badge-hotel);
+  color: var(--badge-text);
+}
+
+.badge-tour {
+  background-color: var(--badge-tour);
+  color: var(--badge-text);
+}
+
+.badge-event {
+  background-color: var(--brand-gold);
+  color: var(--text-primary);
+}
+
+.badge-restaurant {
+  background-color: var(--badge-restaurant);
+  color: var(--badge-text);
+}
+
+.badge-nightlife {
+  background-color: var(--badge-nightlife);
+  color: var(--badge-text);
+}
+
+/* ============================================================================
+   RESULT DESCRIPTION
+   Enhanced typography for readability
+   ============================================================================ */
+
+.result-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  transition: color var(--transition-base);
+}
+
+/* ============================================================================
+   RESULT META
+   Location and date information
+   ============================================================================ */
+
+.result-meta {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  font-size: 16px;
+  color: var(--text-secondary);
+  transition: color var(--transition-base);
+}
+
+.result-location,
+.result-date {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* ============================================================================
+   RESULT ACTIONS
+   Action buttons (Save, Share, Details)
+   ============================================================================ */
+
+.result-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.result-action-button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-primary);
+  color: var(--brand-teal);
+  border: 2px solid var(--brand-teal);
+  border-radius: var(--border-radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.result-action-button:hover {
+  background-color: var(--brand-teal);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.result-action-button:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+.result-action-button:active {
+  transform: scale(0.98);
+}
+
+body.dark-mode .result-action-button {
+  background-color: var(--bg-secondary);
+  color: var(--brand-gold);
+  border-color: var(--brand-gold);
+}
+
+body.dark-mode .result-action-button:hover {
+  background-color: var(--brand-gold);
+  color: var(--text-primary);
+}
+
+body.dark-mode .result-action-button:focus-visible {
+  outline-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - TABLET
+   Adjust layout for tablets (max-width: 768px)
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .search-container {
+    padding: var(--spacing-md);
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  .search-button {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .result-card {
+    padding: var(--spacing-md);
+  }
+
+  .result-title {
+    font-size: 18px;
+  }
+
+  .result-header {
+    flex-direction: column;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MOBILE
+   Adjust layout for mobile devices (max-width: 480px)
+   ============================================================================ */
+
+@media (max-width: 480px) {
+  .search-container {
+    padding: var(--spacing-sm);
+  }
+
+  .search-title {
+    font-size: var(--text-2xl);
+  }
+
+  .search-subtitle {
+    font-size: var(--text-base);
+  }
+
+  .search-input {
+    height: 44px;
+  }
+
+  .search-button {
+    height: 44px;
+  }
+
+  .search-filters {
+    gap: var(--spacing-sm);
+  }
+
+  .filter-button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--text-sm);
+  }
+
+  .result-card {
+    padding: var(--spacing-md);
+  }
+
+  .result-title {
+    font-size: 18px;
+  }
+
+  .result-description {
+    font-size: 15px;
+  }
+
+  .result-meta {
+    font-size: 14px;
+    gap: var(--spacing-md);
+  }
+
+  .result-actions {
+    gap: var(--spacing-sm);
+  }
+
+  .result-action-button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY - HIGH CONTRAST MODE
+   Enhanced styling for users who prefer high contrast
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  .search-input,
+  .filter-button,
+  .result-action-button {
+    border-width: 3px;
+  }
+
+  .search-title,
+  .result-title {
+    font-weight: var(--font-weight-extra-bold);
+  }
+
+  .result-badge {
+    font-weight: var(--font-weight-extra-bold);
+    border-width: 2px;
+  }
+
+  .result-card {
+    border-width: 2px;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY - REDUCED MOTION
+   Respect user's prefers-reduced-motion preference
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .search-input,
+  .search-button,
+  .filter-button,
+  .result-card,
+  .result-action-button {
+    transition: none;
+  }
+
+  .search-button:hover {
+    transform: none;
+  }
+
+  .result-action-button:active {
+    transform: none;
+  }
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

@@ -1,0 +1,311 @@
+/* ============================================================================
+   OUTATLAS DESIGN SYSTEM - CSS CUSTOM PROPERTIES
+   Complete variable definitions for colors, spacing, typography, shadows,
+   borders, radius, and animations
+   ============================================================================ */
+
+/* ============================================================================
+   PART A: COLOR VARIABLES
+   Defines all color tokens for light mode and dark mode themes
+   ============================================================================ */
+
+:root {
+  /* Brand Colors - Consistent across all themes */
+  --brand-teal: #38bd99;
+  --brand-gold: #f5c06e;
+
+  /* Light Mode Colors (Default) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f7fa;
+  --bg-tertiary: #efefef;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --text-inverse: #ffffff;
+  --border-light: #e0e0e0;
+  --border-medium: #cccccc;
+
+  /* Functional Colors */
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-warning: #ff9800;
+  --color-info: #2196f3;
+
+  /* Semantic Color Aliases */
+  --color-positive: var(--color-success);
+  --color-negative: var(--color-error);
+  --color-caution: var(--color-warning);
+  --color-neutral: var(--text-secondary);
+}
+
+/* ============================================================================
+   DARK MODE COLOR OVERRIDES
+   Applied when body.dark-mode class is present
+   ============================================================================ */
+
+body.dark-mode {
+  /* Dark Mode Backgrounds */
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #3d3d3d;
+
+  /* Dark Mode Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #808080;
+  --text-inverse: #1a1a1a;
+
+  /* Dark Mode Borders */
+  --border-light: #444444;
+  --border-medium: #555555;
+
+  /* Brand colors remain consistent */
+  --brand-teal: #38bd99;
+  --brand-gold: #f5c06e;
+
+  /* Functional colors (adjusted for dark mode contrast) */
+  --color-success: #66bb6a;
+  --color-error: #ef5350;
+  --color-warning: #ffa726;
+  --color-info: #42a5f5;
+}
+
+/* ============================================================================
+   PART B: SPACING SYSTEM
+   Consistent spacing scale for margins, padding, gaps
+   ============================================================================ */
+
+:root {
+  /* Base Spacing Scale */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* Semantic Spacing Aliases */
+  --spacing-tight: var(--spacing-xs);
+  --spacing-compact: var(--spacing-sm);
+  --spacing-normal: var(--spacing-md);
+  --spacing-relaxed: var(--spacing-lg);
+  --spacing-loose: var(--spacing-xl);
+  --spacing-extra-loose: var(--spacing-2xl);
+}
+
+/* ============================================================================
+   PART C: TYPOGRAPHY VARIABLES
+   Font families, sizes, weights, and line heights
+   ============================================================================ */
+
+:root {
+  /* Font Families */
+  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-secondary: Georgia, 'Times New Roman', serif;
+  --font-mono: 'Courier New', Courier, monospace;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
+
+  /* Font Sizes */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.05em;
+}
+
+/* ============================================================================
+   PART D: SHADOW VARIABLES
+   Elevation shadows for depth and hierarchy
+   ============================================================================ */
+
+:root {
+  /* Subtle shadows for components */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.12);
+
+  /* Medium shadows for cards and containers */
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  /* Large shadows for elevated content */
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Extra large shadows for modals and overlays */
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.12);
+
+  /* Extra extra large shadows for top-level overlays */
+  --shadow-2xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+
+  /* No shadow utility */
+  --shadow-none: none;
+
+  /* Inner shadows for inset effects */
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Dark mode shadow adjustments */
+body.dark-mode {
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-2xl: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================================
+   PART E: BORDER & RADIUS VARIABLES
+   Border widths and corner radius values
+   ============================================================================ */
+
+:root {
+  /* Border Widths */
+  --border-width: 2px;
+  --border-width-thin: 1px;
+  --border-width-thick: 3px;
+  --border-width-extra-thick: 4px;
+
+  /* Border Radius */
+  --border-radius-none: 0;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-2xl: 20px;
+  --border-radius-full: 9999px;
+
+  /* Semantic Radius Aliases */
+  --border-radius-compact: var(--border-radius-sm);
+  --border-radius-default: var(--border-radius-md);
+  --border-radius-prominent: var(--border-radius-lg);
+  --border-radius-pill: var(--border-radius-full);
+}
+
+/* ============================================================================
+   PART F: ANIMATION & TRANSITION VARIABLES
+   Timing functions and durations for smooth interactions
+   ============================================================================ */
+
+:root {
+  /* Transition Durations */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-base: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+
+  /* Individual Timing Values (milliseconds) */
+  --duration-150: 150ms;
+  --duration-300: 300ms;
+  --duration-500: 500ms;
+  --duration-700: 700ms;
+  --duration-1000: 1000ms;
+
+  /* Easing Functions */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-linear: linear;
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Semantic Transition Aliases */
+  --transition-instant: 0.15s var(--ease-linear);
+  --transition-snappy: 0.3s var(--ease-out);
+  --transition-smooth: 0.5s var(--ease-in-out);
+}
+
+/* ============================================================================
+   ADDITIONAL UTILITY VARIABLES
+   Commonly used combinations and utility values
+   ============================================================================ */
+
+:root {
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+
+  /* Container Queries (max-widths) */
+  --container-xs: 320px;
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+
+  /* Opacity Scale */
+  --opacity-0: 0;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-100: 1;
+}
+
+/* ============================================================================
+   USAGE GUIDE
+
+   How to use these CSS variables throughout your stylesheets:
+
+   COLOR USAGE:
+   color: var(--text-primary);
+   background-color: var(--bg-primary);
+   border: var(--border-width) solid var(--border-light);
+   background: linear-gradient(135deg, var(--brand-teal), var(--brand-gold));
+
+   SPACING USAGE:
+   margin: var(--spacing-md);
+   padding: var(--spacing-lg) var(--spacing-md);
+   gap: var(--spacing-sm);
+
+   TYPOGRAPHY USAGE:
+   font-family: var(--font-primary);
+   font-size: var(--text-lg);
+   font-weight: var(--font-weight-semibold);
+   line-height: var(--line-height-relaxed);
+
+   SHADOW USAGE:
+   box-shadow: var(--shadow-md);
+
+   BORDER & RADIUS USAGE:
+   border-radius: var(--border-radius-lg);
+   border: var(--border-width-thin) solid var(--border-light);
+
+   ANIMATION USAGE:
+   transition: background-color var(--transition-base);
+   animation: fade-in var(--duration-300) var(--ease-out);
+
+   DARK MODE:
+   The dark mode colors are automatically applied when body.dark-mode
+   class is present. All variables will switch their values automatically.
+
+   ============================================================================ */

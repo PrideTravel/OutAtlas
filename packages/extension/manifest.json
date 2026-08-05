@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "OutAtlas",
+  "version": "1.0.0",
+  "minimum_chrome_version": "114",
+  "description": "LGBTQ+ travel planning",
+  "side_panel": { "default_path": "sidepanel.html" },
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_title": "Open OutAtlas", "default_icon": { "48": "icons/48.png" } },
+  "permissions": ["storage", "sidePanel", "alarms", "downloads", "identity"],
+  "oauth2": {
+    "client_id": "YOUR_CHROME_OAUTH_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/userinfo.email", "openid"]
+  },
+  "host_permissions": [
+    "https://images.unsplash.com/*",
+    "https://*.googleapis.com/*",
+    "https://*.firebaseio.com/*",
+    "https://pride-scout-26f4e.firebaseapp.com/*",
+    "https://www.gstatic.com/firebasejs/*"
+  ],
+  "commands": {
+    "_execute_side_panel": {
+      "suggested_key": { "default": "Ctrl+Shift+O", "mac": "Command+Shift+O" },
+      "description": "Open OutAtlas"
+    }
+  },
+  "icons": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" }
+}

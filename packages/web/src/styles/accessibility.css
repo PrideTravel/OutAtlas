@@ -1,0 +1,404 @@
+/* ============================================================================
+   ACCESSIBILITY STYLES
+   Comprehensive accessibility features including reduce-motion support,
+   high-contrast mode, focus states, and dark mode enhancements
+   ============================================================================ */
+
+/* ============================================================================
+   PART A: REDUCE MOTION SUPPORT
+   Respect user's prefers-reduced-motion preference
+   Disables animations for users who prefer reduced motion
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   PART B: HIGH CONTRAST MODE
+   Enhanced visual contrast for users who prefer more contrast
+   Increases border widths, font weights, and element visibility
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  /* Increase border width on all elements */
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  [role="checkbox"],
+  [role="radio"],
+  [role="tab"],
+  [role="tablist"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="menuitemradio"],
+  .button,
+  .btn {
+    border-width: 3px;
+  }
+
+  /* Enhance borders on containers and cards */
+  .card,
+  .panel,
+  .modal,
+  .dialog,
+  [role="dialog"],
+  article,
+  section {
+    border-width: 3px !important;
+  }
+
+  /* Increase badge borders */
+  .badge {
+    border-width: 2px;
+  }
+
+  /* Bold headings and titles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .title,
+  .heading,
+  .section-title,
+  .hotel-name,
+  [role="heading"] {
+    font-weight: var(--font-weight-extra-bold);
+    letter-spacing: var(--letter-spacing-wider);
+  }
+
+  /* Rainbow bar height increase */
+  .rainbow-bar {
+    height: 12px;
+  }
+
+  /* Increase focus outline */
+  *:focus-visible {
+    outline-width: 4px;
+  }
+
+  /* Text decoration on links */
+  a,
+  [role="link"] {
+    text-decoration: underline;
+  }
+
+  /* Enhanced visual separation */
+  hr {
+    border-width: 2px;
+  }
+
+  /* Enhance list markers */
+  li::marker {
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* ============================================================================
+   PART C: FOCUS STATES FOR KEYBOARD NAVIGATION
+   Clear, visible focus indicators for all interactive elements
+   Essential for keyboard navigation and accessibility
+   ============================================================================ */
+
+/* All interactive elements get focus styling */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[role="link"]:focus-visible,
+[role="checkbox"]:focus-visible,
+[role="radio"]:focus-visible,
+[role="tab"]:focus-visible,
+[role="menuitem"]:focus-visible,
+[role="menuitemcheckbox"]:focus-visible,
+[role="menuitemradio"]:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+/* Dark mode focus outline adjustment */
+body.dark-mode button:focus-visible,
+body.dark-mode a:focus-visible,
+body.dark-mode input:focus-visible,
+body.dark-mode textarea:focus-visible,
+body.dark-mode select:focus-visible,
+body.dark-mode [role="button"]:focus-visible,
+body.dark-mode [role="link"]:focus-visible {
+  outline-color: var(--brand-gold);
+}
+
+/* High contrast mode focus adjustments */
+@media (prefers-contrast: more) {
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [role="link"]:focus-visible {
+    outline-width: 4px;
+    outline-offset: 3px;
+  }
+}
+
+/* ============================================================================
+   PART D: DARK MODE ENHANCEMENTS
+   Improved shadows and visual hierarchy in dark mode
+   ============================================================================ */
+
+body.dark-mode {
+  /* Enable dark color scheme for browser UI elements */
+  color-scheme: dark;
+
+  /* Enhanced shadow system for dark mode */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-2xl: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================================
+   VISIBILITY & READABILITY ENHANCEMENTS
+   Improve text readability and element visibility
+   ============================================================================ */
+
+/* Ensure proper contrast for disabled elements */
+:disabled {
+  opacity: var(--opacity-60);
+}
+
+/* Improve placeholder text visibility */
+::placeholder {
+  opacity: var(--opacity-70);
+  font-style: italic;
+}
+
+/* Enhance visited link colors for accessibility */
+a:visited {
+  color: var(--brand-gold);
+}
+
+body.dark-mode a:visited {
+  color: var(--brand-teal);
+}
+
+/* ============================================================================
+   SKIP TO CONTENT LINK
+   Allow keyboard users to skip to main content
+   ============================================================================ */
+
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background-color: var(--brand-teal);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  z-index: 1000;
+  font-weight: var(--font-weight-bold);
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
+/* ============================================================================
+   FOCUS TRAP INDICATOR
+   Visual indicator for modal/dialog focus trap
+   ============================================================================ */
+
+[aria-modal="true"]:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 4px;
+}
+
+/* ============================================================================
+   SCREEN READER TEXT
+   Hide text visually but keep it available to screen readers
+   ============================================================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================================================
+   SCROLLBAR ENHANCEMENTS
+   Improve scrollbar visibility in light and dark modes
+   ============================================================================ */
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-teal);
+  border-radius: var(--border-radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-gold);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--brand-gold);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-teal);
+}
+
+/* ============================================================================
+   FORM FIELD ENHANCEMENTS
+   Improved accessibility for form inputs
+   ============================================================================ */
+
+label {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Ensure form fields have sufficient spacing */
+input,
+textarea,
+select {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Required field indicator */
+[aria-required="true"]::after {
+  content: " *";
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Error state styling */
+[aria-invalid="true"] {
+  border-color: var(--color-error) !important;
+}
+
+[aria-invalid="true"]:focus-visible {
+  outline-color: var(--color-error);
+}
+
+/* ============================================================================
+   ANIMATION UTILITIES
+   Reusable accessibility-conscious animations
+   ============================================================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    animation: fadeIn var(--transition-base);
+  }
+
+  .fade-out {
+    animation: fadeOut var(--transition-base);
+  }
+
+  .slide-in {
+    animation: slideIn var(--transition-base);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+/* ============================================================================
+   MEDIA QUERY COMBINATIONS
+   Complex accessibility scenarios
+   ============================================================================ */
+
+/* Reduce motion + High contrast */
+@media (prefers-reduced-motion: reduce) and (prefers-contrast: more) {
+  * {
+    border-width: 3px !important;
+  }
+
+  button,
+  input,
+  [role="button"] {
+    outline: 3px solid currentColor;
+  }
+}
+
+/* Dark mode + Reduce motion */
+@media (prefers-color-scheme: dark) and (prefers-reduced-motion: reduce) {
+  body.dark-mode * {
+    transition: none !important;
+  }
+}
+
+/* ============================================================================
+   TESTING UTILITIES
+   Classes for testing accessibility features
+   ============================================================================ */
+
+.test-focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+.test-high-contrast {
+  border-width: 3px;
+  font-weight: var(--font-weight-extra-bold);
+}
+
+.test-reduced-motion {
+  animation: none !important;
+  transition: none !important;
+}

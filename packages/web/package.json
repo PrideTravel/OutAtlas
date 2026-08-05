@@ -1,0 +1,23 @@
+{
+  "name": "pridetravelscoutapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pwabuilder-sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:40919/git/PrideTravel/PrideTravelScoutAPP"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@remotion/cli": "^4.0.448",
+    "@remotion/renderer": "^4.0.448",
+    "@tailwindcss/cli": "^4.2.2",
+    "remotion": "^4.0.448",
+    "tailwindcss": "^3.4.19"
+  }
+}

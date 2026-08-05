@@ -1,0 +1,519 @@
+/* ============================================================================
+   APP COMPONENT STYLES
+   Styling for the main App component and its layout structure
+   Uses CSS variables for theme-aware styling
+   ============================================================================ */
+
+/* ============================================================================
+   APP CONTAINER
+   Main flex container for full-height layout
+   ============================================================================ */
+
+.app {
+  /* Full viewport height */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* Theme-aware background and text */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+
+  /* Smooth transitions between themes */
+  transition: background-color var(--transition-base), color var(--transition-base);
+
+  /* Ensure no extra spacing */
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================================
+   HEADER STYLES
+   Top navigation and branding area
+   ============================================================================ */
+
+.app-header {
+  /* Visual separation */
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+
+  /* Spacing */
+  padding: var(--spacing-lg) var(--spacing-md);
+
+  /* Smooth theme transitions */
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+/* Header content wrapper for max-width constraint */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+
+  /* Max width container */
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Branding section */
+.header-brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+.app-title {
+  /* Typography */
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wide);
+
+  /* Colors */
+  color: var(--brand-teal);
+  background: linear-gradient(135deg, var(--brand-teal), var(--brand-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Reset */
+  margin: 0;
+  padding: 0;
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+.app-subtitle {
+  /* Typography */
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+
+  /* Color */
+  color: var(--text-secondary);
+
+  /* Reset */
+  margin: 0;
+  padding: 0;
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+/* Header actions (buttons, toggles, etc.) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-left: auto;
+}
+
+/* ============================================================================
+   MAIN CONTENT AREA
+   Flexible container that grows to fill available space
+   ============================================================================ */
+
+.app-main {
+  /* Flex: takes up remaining space */
+  flex: 1;
+
+  /* Spacing and layout */
+  padding: var(--spacing-lg) var(--spacing-md);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+
+  /* Content positioning */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+
+  /* Smooth transitions */
+  transition: background-color var(--transition-base);
+}
+
+/* ============================================================================
+   HERO SECTION
+   Featured welcome section with call-to-action
+   ============================================================================ */
+
+.hero {
+  /* Layout */
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  margin: 0;
+
+  /* Styling */
+  background: linear-gradient(135deg,
+    rgba(56, 189, 153, 0.05) 0%,
+    rgba(245, 192, 110, 0.05) 100%);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid rgba(56, 189, 153, 0.1);
+
+  /* Transitions */
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.hero-title {
+  /* Typography */
+  font-size: var(--text-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+
+  /* Spacing */
+  margin: 0 0 var(--spacing-md) 0;
+
+  /* Color */
+  color: var(--text-primary);
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+.hero-subtitle {
+  /* Typography */
+  font-size: var(--text-lg);
+  line-height: var(--line-height-normal);
+
+  /* Spacing */
+  margin: 0 0 var(--spacing-lg) 0;
+
+  /* Color */
+  color: var(--text-secondary);
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+.hero-cta {
+  /* Override button spacing */
+  padding: var(--spacing-md) var(--spacing-2xl);
+  font-size: var(--text-lg);
+  margin-top: var(--spacing-md);
+}
+
+/* ============================================================================
+   CONTENT SECTION
+   Standard content area for future use
+   ============================================================================ */
+
+.content-section {
+  /* Spacing */
+  padding: var(--spacing-lg) 0;
+  margin: 0;
+
+  /* Color */
+  color: var(--text-primary);
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+.content-section h2 {
+  /* Spacing */
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+
+  /* Color */
+  color: var(--text-primary);
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+.content-section p {
+  /* Color */
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+/* ============================================================================
+   FOOTER STYLES
+   Bottom navigation and copyright information
+   ============================================================================ */
+
+.app-footer {
+  /* Visual separation */
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
+
+  /* Spacing */
+  padding: var(--spacing-lg) var(--spacing-md);
+
+  /* Layout */
+  text-align: center;
+  margin-top: auto;
+
+  /* Smooth transitions */
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.footer-content {
+  /* Layout */
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+
+  /* Spacing */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.footer-copyright {
+  /* Typography */
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+
+  /* Color */
+  color: var(--text-secondary);
+
+  /* Reset */
+  margin: 0;
+  padding: 0;
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+.footer-tagline {
+  /* Typography */
+  font-size: var(--text-xs);
+  font-style: italic;
+  letter-spacing: var(--letter-spacing-wide);
+
+  /* Color */
+  color: var(--text-tertiary);
+
+  /* Reset */
+  margin: 0;
+  padding: 0;
+
+  /* Transitions */
+  transition: color var(--transition-base);
+}
+
+/* ============================================================================
+   DARK MODE SPECIFIC STYLES
+   Override styles for dark mode
+   ============================================================================ */
+
+body.dark-mode .app-header {
+  background-color: var(--bg-secondary);
+  border-bottom-color: var(--border-light);
+  box-shadow: var(--shadow-md);
+}
+
+body.dark-mode .app-title {
+  color: var(--brand-gold);
+}
+
+body.dark-mode .hero {
+  background: linear-gradient(135deg,
+    rgba(245, 192, 110, 0.1) 0%,
+    rgba(56, 189, 153, 0.05) 100%);
+  border-color: rgba(245, 192, 110, 0.15);
+}
+
+body.dark-mode .app-footer {
+  background-color: var(--bg-secondary);
+  border-top-color: var(--border-light);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - TABLET
+   Adjust layout for tablets (max-width: 768px)
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  /* Header adjustments */
+  .app-header {
+    padding: var(--spacing-md);
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+  }
+
+  .header-brand {
+    text-align: center;
+  }
+
+  .header-actions {
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  .app-title {
+    font-size: var(--text-xl);
+  }
+
+  .app-subtitle {
+    font-size: var(--text-xs);
+  }
+
+  /* Main content adjustments */
+  .app-main {
+    padding: var(--spacing-md);
+    gap: var(--spacing-lg);
+  }
+
+  /* Hero adjustments */
+  .hero {
+    padding: var(--spacing-lg);
+  }
+
+  .hero-title {
+    font-size: var(--text-2xl);
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-base);
+  }
+
+  /* Footer adjustments */
+  .app-footer {
+    padding: var(--spacing-md);
+  }
+
+  .footer-copyright {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MOBILE
+   Adjust layout for small phones (max-width: 480px)
+   ============================================================================ */
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: var(--spacing-sm) var(--spacing-sm);
+  }
+
+  .app-title {
+    font-size: var(--text-lg);
+  }
+
+  .app-subtitle {
+    font-size: var(--text-xs);
+    display: none;
+  }
+
+  .app-main {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-md);
+  }
+
+  .hero {
+    padding: var(--spacing-md);
+  }
+
+  .hero-title {
+    font-size: var(--text-xl);
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-sm);
+  }
+
+  .app-footer {
+    padding: var(--spacing-sm);
+  }
+
+  .footer-copyright {
+    font-size: var(--text-xs);
+  }
+
+  .footer-tagline {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY - HIGH CONTRAST MODE
+   Enhanced styling for users who prefer high contrast
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  .app-header {
+    border-bottom-width: 2px;
+  }
+
+  .app-title {
+    font-weight: var(--font-weight-extra-bold);
+    letter-spacing: var(--letter-spacing-wider);
+  }
+
+  .hero {
+    border-width: 2px;
+  }
+
+  .hero-title {
+    font-weight: var(--font-weight-extra-bold);
+  }
+
+  .app-footer {
+    border-top-width: 2px;
+  }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   Optimize for printing
+   ============================================================================ */
+
+@media print {
+  .app-header {
+    position: relative;
+    border: 1px solid #000;
+  }
+
+  .header-actions {
+    display: none;
+  }
+
+  .app-main {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .hero {
+    background: none;
+    border: none;
+  }
+
+  .app-footer {
+    page-break-before: always;
+  }
+}
+
+/* ============================================================================
+   SKIP TO MAIN CONTENT LINK
+   Accessibility feature for keyboard users
+   ============================================================================ */
+
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--brand-teal);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-to-main:focus {
+  top: 0;
+}

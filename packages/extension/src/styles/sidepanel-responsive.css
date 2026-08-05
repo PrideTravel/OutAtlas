@@ -1,0 +1,53 @@
+/* Side Panel responsive overrides — targets Chrome's ~400px docked width
+   and ~600–800px detached/floating width.                                 */
+
+@media (max-width: 480px) {
+  /* Collapse 4-column venue grid to 2 columns */
+  .venue-grid,
+  .grid-cols-4,
+  [class*="grid-cols-4"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Prevent horizontal overflow on result cards */
+  .result-card,
+  .ps-result-card {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Hotspot carousel — single column */
+  .hotspot-cards,
+  .safe-hotspot-cards {
+    flex-direction: column;
+  }
+
+  /* Search bar — full width */
+  .search-bar,
+  #search-form,
+  .ps-search-bar {
+    width: 100%;
+    min-width: unset;
+  }
+
+  /* Tighten padding on panels */
+  .ps-panel,
+  .modal-content {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Event/tour cards — stack instead of side-by-side */
+  .event-card,
+  .tour-card {
+    flex-direction: column;
+  }
+}
+
+/* Detached / floating Side Panel (~600–800px) */
+@media (min-width: 481px) and (max-width: 800px) {
+  .venue-grid,
+  [class*="grid-cols-4"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

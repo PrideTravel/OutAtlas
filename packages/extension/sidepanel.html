@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" name="viewport"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="yes" name="mobile-web-app-capable"/>
+<link href="manifest.json" rel="manifest"/>
+<title>OutAtlas</title>
+<!-- 1. External Dependencies -->
+<!-- FontAwesome for Icons -->
+
+<!-- Google Fonts -->
+
+
+
+
+<!-- Tailwind CSS (local production build — replaces CDN for performance) -->
+<link href="tailwind.min.css" rel="stylesheet"/>
+<!-- 2. Theme System & Design Tokens (WCAG AAA Accessible) -->
+<!-- Theme Variables - Three-theme system with Clear View, Light, Dark modes -->
+<link href="src/styles/theme-variables.css" rel="stylesheet"/>
+<!-- Design System - Complete token set for spacing, typography, shadows -->
+<link href="src/styles/variables.css" rel="stylesheet"/>
+<!-- Global Styles - Base element styles using CSS variables -->
+<link href="src/styles/global.css" rel="stylesheet"/>
+<!-- Accessibility Features - Reduce motion, high contrast, focus states -->
+<link href="src/styles/accessibility.css" rel="stylesheet"/>
+<!-- 3. Component & Layout Styles -->
+<!-- Core component classes using CSS variables -->
+<link href="src/styles/components.css" rel="stylesheet"/>
+<!-- Modal dialog styles (Settings, theme selector) -->
+<link href="src/styles/modal.css" rel="stylesheet"/>
+<!-- App Layout -->
+<link href="src/components/App.css" rel="stylesheet"/>
+<!-- Theme Toggle Button -->
+<link href="src/components/ThemeToggle.css" rel="stylesheet"/>
+<!-- Search Component -->
+<link href="src/components/Search.css" rel="stylesheet"/>
+<!-- Bookmarks Component -->
+<link href="src/components/Bookmarks.css" rel="stylesheet"/>
+<!-- Messages Component -->
+<link href="src/components/Messages.css" rel="stylesheet"/>
+<!-- 4. Custom CSS -->
+<style>
+        .pride-gradient-text {
+            background: linear-gradient(to right, #FF0018, #FFA52C, #eab308, #008018, #0000F9, #86007D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .outatlas-name-text {
+            background: linear-gradient(to bottom, #FF0018, #FFA52C, #eab308, #008018, #0000F9, #86007D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Dark mode: Pride gradient does not have an innate background pill. Added where necessary via wrapper class dark-pill. */
+        html.dark .dark-pill {
+            background-color: white !important;
+            border-radius: 9999px !important;
+            padding: 0.1rem 0.8rem !important;
+            display: inline-block !important;
+            border: 2px solid white !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+            color: black !important;
+        }
+
+        /* Light mode: Ensure all dark-pill text is black */
+        .dark-pill,
+        section h3.dark-pill,
+        h3.dark-pill {
+            color: black !important;
+        }
+
+        /* Dark mode section headlines - ensure text is black for readability */
+        html.dark section h3.dark-pill,
+        html.dark h3.dark-pill {
+            color: black !important;
+        }
+
+        html.dark .pride-gradient-text {
+            background: linear-gradient(to right, #FF0018, #FFA52C, #eab308, #008018, #0000F9, #86007D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        html.dark .outatlas-name-text {
+            background: linear-gradient(to bottom, #FF0018, #FFA52C, #eab308, #008018, #0000F9, #86007D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+        }
+
+        .rainbow-border {
+            position: relative;
+            z-index: 0;
+        }
+
+        .rainbow-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D);
+            z-index: -1;
+            border-radius: 1.1rem;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        html.dark body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+
+        /* Saved trips panel — dark mode */
+        html.dark #ps-trips-inner {
+            background: #1e293b;
+            color: #f1f5f9;
+        }
+
+        html.dark .ps-trip-card {
+            background: #334155;
+        }
+
+        html.dark .ps-trip-title {
+            color: #f1f5f9 !important;
+        }
+
+        html.dark .ps-trip-date {
+            color: #94a3b8 !important;
+        }
+
+        html.dark .ps-trip-section {
+            background: rgba(255,255,255,0.06) !important;
+        }
+
+        html.dark .ps-trip-item {
+            background: #1e293b !important;
+            border-color: #475569 !important;
+        }
+
+        html.dark .ps-trip-item-text {
+            color: #cbd5e1 !important;
+        }
+
+        html.dark .ps-trip-btn-secondary {
+            background: #475569 !important;
+            color: #e2e8f0 !important;
+        }
+
+        html.dark .ps-trip-input {
+            background: #1e293b !important;
+            border-color: #475569 !important;
+            color: #f1f5f9 !important;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8f5f7;
+            color: #1e293b;
+            min-height: 100vh;
+            padding-bottom: 5rem;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' var(--fill, 0), 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .fill-1 {
+            --fill: 1;
+        }
+
+        .pride-gradient-bg {
+            background: linear-gradient(45deg, #FF0018, #FFA52C, #eab308, #008018, #0000F9, #86007D);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Rainbow Search Card */
+        .rainbow-card-bg {
+            background: linear-gradient(45deg, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D);
+        }
+
+        .pill-input {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-pride-yellow {
+            background: linear-gradient(to right, #facc15, #fb923c);
+            color: #1e293b;
+        }
+
+        /* View Management */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* ===== PRIDE SCOUT AUTH STYLES ===== */
+        #ps-auth-modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #ps-auth-modal-backdrop.open {
+            display: flex;
+        }
+
+        #ps-auth-modal {
+            background: #fff;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            width: min(420px, 92vw);
+            box-shadow: 0 25px 60px rgba(242, 13, 143, 0.18);
+            animation: psModalIn .25s ease;
+        }
+
+        @keyframes psModalIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ps-tab {
+            cursor: pointer;
+            padding: .5rem 1.25rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .85rem;
+            transition: .2s;
+        }
+
+        .ps-tab.active {
+            background: linear-gradient(90deg, #f20d8f, #86007D);
+            color: #fff;
+        }
+
+        .ps-tab:not(.active) {
+            color: #888;
+        }
+
+        .ps-input {
+            width: 100%;
+            border: 2px solid #e5e7eb;
+            border-radius: .75rem;
+            padding: .65rem 1rem;
+            font-size: .9rem;
+            outline: none;
+            transition: .2s;
+            margin-bottom: .75rem;
+            font-family: inherit;
+        }
+
+        .ps-input:focus {
+            border-color: #f20d8f;
+        }
+
+        .ps-btn-primary {
+            width: 100%;
+            padding: .75rem;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: .9rem;
+            background: linear-gradient(90deg, #f20d8f, #86007D);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: .2s;
+            margin-bottom: .5rem;
+            font-family: inherit;
+        }
+
+        .ps-btn-primary:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+        }
+
+        .ps-btn-google {
+            width: 100%;
+            padding: .7rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .85rem;
+            background: #fff;
+            color: #444;
+            border: 2px solid #e5e7eb;
+            cursor: pointer;
+            transition: .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            font-family: inherit;
+        }
+
+        .ps-btn-google:hover {
+            border-color: #4285F4;
+            color: #4285F4;
+        }
+
+        .ps-error {
+            color: #e11d48;
+            font-size: .8rem;
+            margin-bottom: .5rem;
+            min-height: 1.1rem;
+        }
+
+        #ps-user-menu-wrap {
+            position: fixed;
+            top: 14px;
+            right: 16px;
+            z-index: 9000;
+        }
+
+        #ps-user-btn {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .4rem .9rem;
+            background: linear-gradient(90deg, #f20d8f, #86007D);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .8rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        #ps-user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + .5rem);
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .15);
+            min-width: 160px;
+            overflow: hidden;
+            z-index: 999;
+        }
+
+        #ps-user-dropdown.open {
+            display: block;
+        }
+
+        .ps-dd-item {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .75rem 1rem;
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #333;
+            transition: .15s;
+        }
+
+        .ps-dd-item:hover {
+            background: #fdf0f7;
+            color: #f20d8f;
+        }
+
+        #ps-trips-panel {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            background: rgba(0, 0, 0, .5);
+            backdrop-filter: blur(4px);
+        }
+
+        #ps-trips-panel.open {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        #ps-trips-panel.fullscreen {
+            background: transparent;
+            backdrop-filter: none;
+        }
+
+        #ps-trips-panel.fullscreen #ps-trips-inner {
+            width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        #ps-trips-inner {
+            background: #fff;
+            border-radius: 1.5rem 1.5rem 0 0;
+            width: min(480px, 100vw);
+            max-height: 80vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 1.75rem;
+            padding-bottom: max(1.75rem, env(safe-area-inset-bottom));
+            box-shadow: 0 -8px 40px rgba(242, 13, 143, .15);
+            animation: psPanelIn .3s ease;
+            position: relative;
+        }
+
+        @media (max-width: 480px) {
+            #ps-trips-inner {
+                width: 100vw;
+                border-radius: 1.5rem 1.5rem 0 0;
+            }
+        }
+
+        #ps-upcoming-trips-panel {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            background: rgba(0, 0, 0, .5);
+            backdrop-filter: blur(4px);
+        }
+
+        #ps-upcoming-trips-panel.open {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        #ps-upcoming-trips-panel.fullscreen {
+            background: transparent;
+            backdrop-filter: none;
+        }
+
+        #ps-upcoming-trips-panel.fullscreen #ps-upcoming-trips-inner {
+            width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        #ps-upcoming-trips-inner {
+            background: #fff;
+            border-radius: 1.5rem 1.5rem 0 0;
+            width: min(480px, 100vw);
+            max-height: 80vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 1.75rem;
+            padding-bottom: max(1.75rem, env(safe-area-inset-bottom));
+            box-shadow: 0 -8px 40px rgba(242, 13, 143, .15);
+            animation: psPanelIn .3s ease;
+            position: relative;
+        }
+
+        @media (max-width: 480px) {
+            #ps-upcoming-trips-inner {
+                width: 100vw;
+                border-radius: 1.5rem 1.5rem 0 0;
+            }
+        }
+
+        @keyframes psPanelIn {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .ps-trip-card {
+            background: #fdf0f7;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: .75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: .5rem;
+        }
+
+        .ps-save-btn {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 999px;
+            padding: .35rem .85rem;
+            font-size: .78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            transition: .2s;
+            color: #555;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .ps-save-btn.saved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .ps-save-btn:hover:not(.saved) {
+            background: #fdf0f7;
+            color: #f20d8f;
+        }
+    </style>
+<meta content="#f20d8f" name="theme-color"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<link href="manifest.json" rel="manifest"/>
+<link href="https://pridetravel.github.io/OutAtlasAPP/icon-512.png" rel="apple-touch-icon"/>
+
+<!-- window._DESTINATIONS_DATA removed so destinations.json is fetched directly -->
+<!-- destinations-data script removed -->
+<!-- 5. Theme System Initialization with localStorage & System Preferences -->
+
+</head>
+<body class="bg-background-light dark:bg-slate-900 font-display text-slate-900 dark:text-white min-h-screen pb-24">
+<!-- Top Navigation / Brand -->
+<header class="sticky top-0 z-50 bg-background-light dark:bg-slate-900/80 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b" style="border-bottom: 8px solid; border-image: linear-gradient(to right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D) 1;">
+<div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" data-sp-id="sp-auto-1" title="Back to Home">
+<div class="w-8 h-8 rounded-lg pride-gradient-bg flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white text-xl font-black">flight_takeoff</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight inline-block dark-pill"><span class="outatlas-name-text">OutAtlas</span></h1>
+</div>
+</header>
+<main class="max-w-5xl mx-auto mt-6 px-4">
+<!-- View 1: Explore (Home) -->
+<div class="view-section active space-y-8" id="homeView">
+<!-- 1. Search & Info Section -->
+<section class="rainbow-card-bg rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+<!-- Plan Your Journey -->
+<div class="flex items-center justify-between gap-3 mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white text-3xl">map</span>
+<h2 class="text-2xl font-black text-black italic">Plan Your Journey</h2>
+</div>
+<button aria-label="Toggle theme (Clear View, Light, Dark)" class="flex items-center justify-center w-12 h-12 rounded-lg transition-all bg-white/70 hover:bg-white active:scale-95 shrink-0 shadow-md" data-sp-id="sp-auto-2" title="Toggle theme">
+<span class="material-symbols-outlined text-2xl text-slate-900">dark_mode</span>
+</button>
+</div>
+<form class="space-y-4" id="searchForm">
+<div class="space-y-3">
+<div class="flex flex-col gap-1">
+<label class="text-xs font-black text-slate-700 dark:text-black ml-2 uppercase tracking-wide" for="departure">Departure
+                                City</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary">flight_takeoff</span>
+<input class="w-full pl-12 pr-4 py-4 pill-input border-none focus:ring-4 focus:ring-white/30 text-sm font-bold placeholder:text-slate-500 text-slate-900 dark:text-black" id="departure" placeholder="e.g. New York, LHR" required="" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-xs font-black text-slate-700 dark:text-black ml-2 uppercase tracking-wide" for="destination">Destination
+                                (City, Country or Region)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary">location_on</span>
+<input class="w-full pl-12 pr-4 py-4 pill-input border-none focus:ring-4 focus:ring-white/30 text-sm font-bold placeholder:text-slate-500 text-slate-900 dark:text-black" id="destination" placeholder="e.g. Paris, USA, Asia" required="" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex flex-col gap-1">
+<label class="text-xs font-black text-slate-700 dark:text-black ml-2 uppercase tracking-wide" for="dateStart">Departure
+                                Date <span class="font-normal normal-case" style="color:#392020">(optional — skip for event listings)</span></label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary">calendar_today</span>
+<input class="w-full pl-12 pr-4 py-4 pill-input border-none focus:ring-4 focus:ring-white/30 text-xs font-bold text-slate-900 dark:text-black" id="dateStart" min="2026-04-09" type="date"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-xs font-black text-slate-700 dark:text-black ml-2 uppercase tracking-wide" for="dateEnd">Return
+                                Date</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary">event_repeat</span>
+<input class="w-full pl-12 pr-4 py-4 pill-input border-none focus:ring-4 focus:ring-white/30 text-xs font-bold text-slate-900 dark:text-black" id="dateEnd" min="2026-04-09" type="date"/>
+</div>
+</div>
+</div>
+<button class="w-full btn-pride-yellow font-black py-4 rounded-full shadow-xl flex items-center justify-center gap-3 text-lg active:scale-95 transition-all mt-4 border-b-4 border-orange-600" type="submit">
+<span class="material-symbols-outlined font-black">search</span> Find your Pride
+                    </button>
+</form>
+</section>
+<!-- 2. Safe Hotspots Section -->
+<section id="hotspots-section">
+<div class="flex justify-between items-end mb-4">
+<h3 class="text-xl font-bold inline-block dark-pill"><span class="pride-gradient-text">Safe
+                            Hotspots</span></h3>
+<button class="text-xl font-black text-primary bg-primary/10 hover:bg-primary/20 px-4 py-1.5 rounded-full border border-primary/30 transition-colors" data-sp-id="sp-auto-3">View More</button>
+</div>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-6 -mx-4 px-4 snap-x" id="hotspotsContainer">
+<!-- JS populated -->
+</div>
+</section>
+<!-- 3. Trending Pride Events Section -->
+<section class="pb-12" id="trending-events-section">
+<h3 class="text-xl font-bold mb-4 inline-block dark-pill"><span class="pride-gradient-text">Trending
+                        Pride Events</span></h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="eventsGrid">
+<!-- JS populated -->
+</div>
+<div class="flex justify-center mt-6">
+<button class="text-xl font-black text-primary bg-primary/10 hover:bg-primary/20 px-6 py-2 rounded-full border border-primary/30 transition-colors" data-sp-id="sp-auto-4">View More</button>
+</div>
+</section>
+</div>
+<!-- View 2: Results -->
+<div class="view-section space-y-8 pb-32" id="resultsView">
+<!-- Back button and Theme Toggle for results view -->
+<div class="flex items-center justify-between gap-4 mb-4">
+<button class="flex items-center gap-2 text-primary font-bold" data-sp-id="sp-auto-5">
+<span class="material-symbols-outlined">arrow_back</span> Back to search
+                </button>
+<!-- Theme Toggle Button -->
+<button aria-label="Toggle theme (Clear View, Light, Dark)" class="flex items-center justify-center w-10 h-10 rounded-lg transition-all hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95" data-sp-id="sp-auto-6" title="Toggle theme">
+<span class="material-symbols-outlined text-xl text-slate-700 dark:text-slate-200">dark_mode</span>
+</button>
+</div>
+<div id="resultsContainer">
+<!-- Results injected here -->
+</div>
+</div>
+<!-- View 4: Events Only (Dateless Search) -->
+<div class="view-section space-y-6 pb-32" id="eventsOnlyView">
+<button class="flex items-center gap-2 text-primary font-bold mb-2" data-sp-id="sp-auto-7">
+<span class="material-symbols-outlined">arrow_back</span> Back to search
+            </button>
+<div class="flex items-center justify-between gap-4 mb-4">
+<div>
+<h2 class="text-2xl font-black inline-block dark-pill"><span class="pride-gradient-text">All LGBTQ+ Events</span></h2>
+<p class="text-sm text-slate-700 dark:text-slate-300 mt-2">Showing all known events for this destination. Add travel dates to see flights, hotels &amp; full recommendations.</p>
+</div>
+<button aria-label="Toggle theme (Clear View, Light, Dark)" class="flex items-center justify-center w-10 h-10 rounded-lg transition-all hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 shrink-0" data-sp-id="sp-auto-8" title="Toggle theme">
+<span class="material-symbols-outlined text-xl text-slate-700 dark:text-slate-200">dark_mode</span>
+</button>
+</div>
+<div id="eventsOnlyContainer">
+<!-- Events injected here by JS -->
+</div>
+</div>
+<!-- View 3: All Safe Hotspots -->
+<div class="view-section space-y-8 pb-32" id="allHotspotsView">
+<!-- Back button for all hotspots view -->
+<button class="flex items-center gap-2 text-primary font-bold mb-4" data-sp-id="sp-auto-9">
+<span class="material-symbols-outlined">arrow_back</span> Back
+            </button>
+<div class="flex items-center justify-between gap-4 mb-2">
+<h2 class="text-xl font-black inline-block dark-pill"><span class="pride-gradient-text">More Safe Hotspots</span></h2>
+<div class="flex gap-2 shrink-0">
+<!-- Theme Toggle Button -->
+<button aria-label="Toggle theme (Clear View, Light, Dark)" class="flex items-center justify-center w-10 h-10 rounded-lg transition-all hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95" data-sp-id="sp-auto-10" title="Toggle theme">
+<span class="material-symbols-outlined text-xl text-slate-700 dark:text-slate-200">dark_mode</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary bg-primary/10 hover:bg-primary/20 px-3 py-2 rounded-2xl border border-primary/30 transition-colors" data-sp-id="sp-auto-11" title="Tap to limit results to 25 — resets to full 40 on next load or search">
+<span class="material-symbols-outlined text-2xl">smartphone</span>
+<span class="text-[10px] font-black uppercase leading-tight text-center">Limit<br/>Results</span>
+</button>
+</div>
+</div>
+<p class="text-slate-700 dark:text-slate-300 dark:text-slate-300 text-sm font-medium mb-6">More featured LGBTQ+ destinations, trending events, and cruises from across the globe.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="allHotspotsGrid">
+<!-- Randomized Hotspots injected here -->
+</div>
+</div>
+</main>
+<!-- Footer / Legal Section -->
+<section class="max-w-5xl mx-auto pt-8 pb-12 px-6 border-t border-slate-200 dark:border-slate-700">
+<h4 class="text-xs font-bold text-slate-700 dark:text-slate-200 mb-4 uppercase tracking-wider">Terms &amp;
+            Conditions and Legal
+            Disclaimer
+        </h4>
+<div class="space-y-4 text-[10px] leading-relaxed text-slate-700 dark:text-slate-300 dark:text-slate-300">
+<p><span class="font-bold text-slate-600">1. SCOPE OF SERVICE:</span> This Application curated to prioritize
+                locations that demonstrate established LGBTQ+ inclusivity and maintain robust legislative protections.
+            </p>
+<p><span class="font-bold text-slate-600">2. GENERAL BOOKING CONDITIONS:</span> All arrangements made
+                through
+                this Application are strictly subject to the terms and conditions of respective third-party vendors.</p>
+<p><span class="font-bold text-slate-600">3. CANCELLATION FEES:</span> All cancellation policies are
+                determined solely by the individual carrier, hotel, or tour operator. We have no control over these
+                third-party policies.</p>
+<p><span class="font-bold text-slate-600">4. TRAVEL INSURANCE:</span> Travel insurance is strongly
+                recommended to protect your investment. Failure to purchase insurance may result in a total loss of
+                prepaid funds.</p>
+<p><span class="font-bold text-slate-600">5. PURPOSE OF DATA COLLECTION:</span> Your email address is
+                collected specifically to provide you with curated updates, including but not limited to:</p>
+<ul class="list-disc list-inside pl-2 space-y-2 text-sm text-slate-700 dark:text-slate-300">
+<li><span class="font-semibold text-slate-700 dark:text-slate-200">Event Alerts:</span> Updates on upcoming festivals, pride
+                    events, and seasonal gatherings (e.g., Pig Week, Beef Dip, Christmas Markets).</li>
+<li><span class="font-semibold text-slate-700 dark:text-slate-200">Travel &amp; Lodging:</span> Exclusive hotel offers,
+                    circuit party accommodations, and cruise-related promotions.</li>
+<li><span class="font-semibold text-slate-700 dark:text-slate-200">Destination Insights:</span> Information regarding
+                    LGBTQ-friendly travel destinations and local venue recommendations.</li>
+</ul>
+<p><span class="font-bold text-slate-600">6. CONSENT &amp; COMMUNICATION:</span> By subscribing, you grant
+                us permission to send automated marketing and informational emails to the address provided. You may
+                opt-out of these communications at any time by clicking the "Unsubscribe" link found at the bottom of
+                our emails or by contacting our support team directly.</p>
+<p><span class="font-bold text-slate-600">7. PRIVACY &amp; SECURITY:</span> We value your privacy,
+                especially regarding travel preferences and community affiliations.</p>
+<ul class="list-disc list-inside pl-2 space-y-2 text-sm text-slate-700 dark:text-slate-300">
+<li><span class="font-semibold text-slate-700 dark:text-slate-200">No Third-Party Sales:</span> We do not sell, rent, or
+                    lease our subscription lists to third parties.</li>
+<li><span class="font-semibold text-slate-700 dark:text-slate-200">Secure Storage:</span> Your data is stored using
+                    industry-standard encryption (e.g., Firebase Authentication and Firestore) to protect against
+                    unauthorized access.</li>
+<li><span class="font-semibold text-slate-700 dark:text-slate-200">Service Providers:</span> We may share your email with
+                    trusted service providers (such as email delivery platforms) solely for the purpose of sending these
+                    alerts.</li>
+</ul>
+<p class="pt-4 font-medium">© 2026 TravelinPride.com.</p>
+</div>
+</section>
+<!-- OutAtlas Auth Modal -->
+<div id="ps-auth-modal-backdrop">
+<div id="ps-auth-modal">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+<div style="background:linear-gradient(90deg,#f20d8f,#86007D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:1.1rem;">
+                    OutAtlas Account
+                </div>
+<button data-sp-id="sp-auto-12" style="background:none;border:none;cursor:pointer;font-size:1.4rem;color:#888;">✕</button>
+</div>
+<div style="display:flex;gap:.5rem;margin-bottom:1.25rem;">
+<button class="ps-tab active" id="ps-tab-in">Sign In</button>
+<button class="ps-tab" id="ps-tab-up">Create Account</button>
+</div>
+<p id="ps-modal-msg" style="font-size:.82rem;color:#f20d8f;font-weight:600;margin-bottom:.5rem;min-height:1.1rem;"></p>
+<input class="ps-input" id="ps-auth-name" placeholder="Your name" style="display:none;" type="text"/>
+<input autocomplete="email" class="ps-input" id="ps-auth-email" placeholder="Email address" type="email"/>
+<input autocomplete="current-password" class="ps-input" id="ps-auth-pass" placeholder="Password" type="password"/>
+<a href="#" id="ps-auth-forgot" style="font-size:.8rem;color:#f20d8f;text-decoration:none;display:block;text-align:right;margin-top:.2rem;margin-bottom:.5rem;">Forgot
+                Password?</a>
+<div class="ps-error" id="ps-auth-error"></div>
+<button class="ps-btn-primary" id="ps-auth-submit">Sign In</button>
+<div style="text-align:center;color:#ccc;font-size:.8rem;margin:.5rem 0;">or</div>
+<button class="ps-btn-google" data-sp-id="sp-auto-13">
+<svg height="18" viewbox="0 0 48 48" width="18">
+<path d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.07 17.74 9.5 24 9.5z" fill="#EA4335"></path>
+<path d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" fill="#4285F4"></path>
+<path d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" fill="#FBBC05"></path>
+<path d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-3.57-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" fill="#34A853"></path>
+</svg>
+                Continue with Google
+            </button>
+</div>
+</div>
+<!-- Saved Trips Panel -->
+<div id="ps-trips-panel">
+<div id="ps-trips-inner">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+<h2 style="font-weight:900;font-size:1.1rem;background:linear-gradient(90deg,#f20d8f,#86007D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    My Saved Trips
+                </h2>
+<div style="display:flex;gap:0.5rem;align-items:center;">
+<button data-sp-id="sp-auto-14" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#888;padding:0.5rem;min-width:2.5rem;min-height:2.5rem;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;margin:-0.5rem;" title="Toggle fullscreen">⛶</button>
+<button data-sp-id="sp-auto-15" style="background:none;border:none;cursor:pointer;font-size:1.3rem;color:#888;padding:0.5rem;min-width:2.5rem;min-height:2.5rem;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;margin:-0.5rem;">✕</button>
+</div>
+</div>
+<div id="ps-trips-list">
+<p style="color:#aaa;font-size:.9rem;text-align:center;padding:2rem 0;">No saved trips yet. Search for a
+                    destination and tap Save Trip!</p>
+</div>
+</div>
+</div>
+<!-- Upcoming Trips Dashboard -->
+<div id="ps-upcoming-trips-panel">
+<div id="ps-upcoming-trips-inner">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+<h2 style="font-weight:900;font-size:1.1rem;background:linear-gradient(90deg,#f20d8f,#86007D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    Confirmed Trips
+                </h2>
+<div style="display:flex;gap:0.5rem;align-items:center;">
+<button data-sp-id="sp-auto-16" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#888;padding:0.5rem;min-width:2.5rem;min-height:2.5rem;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;margin:-0.5rem;" title="Toggle fullscreen">⛶</button>
+<button data-sp-id="sp-auto-17" style="background:none;border:none;cursor:pointer;font-size:1.3rem;color:#888;padding:0.5rem;min-width:2.5rem;min-height:2.5rem;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;margin:-0.5rem;">✕</button>
+</div>
+</div>
+<!-- Leaving Soon Section -->
+<div id="ps-leaving-soon-section" style="margin-bottom:2rem;display:none;">
+<h3 style="font-weight:700;font-size:.95rem;color:#f20d8f;margin-bottom:.75rem;">🚀 Leaving Soon (Next 30 Days)</h3>
+<div id="ps-leaving-soon-container" style="display:flex;flex-direction:column;gap:.75rem;"></div>
+</div>
+<!-- Future Trips Section -->
+<div id="ps-future-trips-section" style="margin-bottom:2rem;display:none;">
+<h3 style="font-weight:700;font-size:.95rem;color:#f20d8f;margin-bottom:.75rem;">📅 Future Trips (30-90 Days)</h3>
+<div id="ps-future-trips-container" style="display:flex;flex-direction:column;gap:.75rem;"></div>
+</div>
+<!-- Past Trips Section -->
+<div id="ps-past-trips-section" style="margin-bottom:2rem;display:none;">
+<h3 style="font-weight:700;font-size:.95rem;color:#999;margin-bottom:.75rem;">📸 Past Adventures</h3>
+<div id="ps-past-trips-container" style="display:flex;flex-direction:column;gap:.75rem;"></div>
+</div>
+<p id="ps-no-confirmed-trips" style="color:#aaa;font-size:.9rem;text-align:center;padding:2rem 0;">No confirmed trips yet. Save a trip and confirm it!</p>
+</div>
+</div>
+<!-- User menu button (rendered by JS) -->
+<div id="ps-user-menu-wrap"></div>
+<!-- Firebase loaded via npm — see packages/extension/src/firebase.js -->
+
+
+
+
+<!-- Settings Modal for Theme & Accessibility Selection -->
+<div class="modal-overlay" id="settingsModal">
+<div class="modal-content">
+<!-- Modal Header with Close Button -->
+<div class="modal-header">
+<h2 class="modal-title">Appearance</h2>
+<button aria-label="Close settings modal" class="modal-close-btn" id="close-modal" title="Close (ESC)">
+                    ✕
+                </button>
+</div>
+<!-- Modal Body Content -->
+<div class="modal-body">
+<!-- Display Mode Section -->
+<section>
+<label class="modal-section-label">Display Mode</label>
+<!-- Theme Options Grid -->
+<div class="theme-options-grid">
+<!-- Clear View Option -->
+<button aria-label="Select Clear View theme - WCAG AAA accessible mode with solid colors" class="theme-option clear-view" data-sp-id="sp-auto-18" data-theme="clear">
+<div class="theme-preview"><span class="material-symbols-outlined" style="font-size: 28px;">contrast</span></div>
+<div class="theme-name">Clear View</div>
+<div class="theme-description">High contrast, solid colors</div>
+<div class="theme-checkmark">✓</div>
+</button>
+<!-- Light Mode Option -->
+<button aria-label="Select Light Mode - bright and clean interface" class="theme-option light-mode" data-sp-id="sp-auto-19" data-theme="light">
+<div class="theme-preview"><span class="material-symbols-outlined" style="font-size: 28px;">light_mode</span></div>
+<div class="theme-name">Light Mode</div>
+<div class="theme-description">Bright &amp; clean</div>
+<div class="theme-checkmark">✓</div>
+</button>
+<!-- Dark Mode Option -->
+<button aria-label="Select Dark Mode - reduces eye strain at night" class="theme-option dark-mode" data-sp-id="sp-auto-20" data-theme="dark">
+<div class="theme-preview"><span class="material-symbols-outlined" style="font-size: 28px;">dark_mode</span></div>
+<div class="theme-name">Dark Mode</div>
+<div class="theme-description">Easy on the eyes</div>
+<div class="theme-checkmark">✓</div>
+</button>
+</div>
+</section>
+<!-- Clear View Information Box -->
+<div class="modal-info-box">
+<div class="modal-info-icon">♿</div>
+<div class="modal-info-text">
+<div class="modal-info-title">Clear View Mode</div>
+<div class="modal-info-description">
+                            WCAG AAA compliant with maximum contrast for accessibility.
+                            Colorful gradients are converted to solid colors for optimal readability.
+                        </div>
+</div>
+</div>
+<!-- Divider -->
+<div class="modal-divider"></div>
+<!-- Accessibility Section -->
+<section class="accessibility-section">
+<label class="modal-section-label">Accessibility</label>
+<label class="accessibility-option">
+<input aria-label="Reduce animations preference" class="accessibility-checkbox" id="reduceAnimations" onchange="toggleReduceMotion()" type="checkbox"/>
+<div class="accessibility-label">
+<span class="accessibility-label-title">Reduce animations</span>
+<span class="accessibility-label-description">Disables transitions and animations</span>
+</div>
+</label>
+<label class="accessibility-option">
+<input aria-label="High contrast mode preference" class="accessibility-checkbox" id="highContrast" onchange="toggleHighContrast()" type="checkbox"/>
+<div class="accessibility-label">
+<span class="accessibility-label-title">High contrast</span>
+<span class="accessibility-label-description">Increases border thickness and font weight</span>
+</div>
+</label>
+</section>
+</div>
+</div>
+</div>
+<!-- Search Warning Modal - Past Date Alert -->
+<div class="search-warning-overlay" id="searchWarningModal" style="display: none;">
+<div aria-labelledby="warning-title" aria-modal="true" class="search-warning-modal" role="dialog">
+<h2 class="search-warning-title" id="warning-title">Your search is in the Past- Don't go Back!</h2>
+<p class="search-warning-text">Please select a travel date that is today or in the future.</p>
+<button class="search-warning-btn" data-sp-id="sp-auto-21">
+                Got it, let me fix that
+            </button>
+</div>
+</div>
+<!-- Settings Modal JavaScript -->
+
+<script src="./src/sidepanel.js" type="module"></script></body>
+</html>

@@ -1,0 +1,489 @@
+/* ============================================================================
+   SETTINGS MODAL STYLES
+   Beautiful, accessible modal for theme and accessibility settings
+   Respects all accessibility preferences and includes smooth animations
+   ============================================================================ */
+
+/* ============================================================================
+   MODAL OVERLAY
+   Semi-transparent backdrop with fade-in animation
+   ============================================================================ */
+
+.settings-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+  padding: var(--spacing-md);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   MODAL CONTENT
+   Main container with rounded corners and slide-up animation
+   ============================================================================ */
+
+.settings-modal-content {
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-2xl);
+  animation: slideUp 0.3s ease-out;
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   MODAL HEADER
+   Sticky header with title and close button
+   ============================================================================ */
+
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: 2px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-primary);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.settings-modal-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.settings-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-base);
+  font-size: 1.5rem;
+  padding: 0;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.settings-modal-close:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.settings-modal-close:focus {
+  outline: none;
+}
+
+.settings-modal-close:focus-visible {
+  outline: 3px solid var(--brand-teal);
+  outline-offset: 2px;
+}
+
+body.dark-mode .settings-modal-close:focus-visible {
+  outline-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   MODAL BODY
+   Content area with sections and settings
+   ============================================================================ */
+
+.settings-modal-body {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ============================================================================
+   SECTION STYLES
+   Appearance and Accessibility sections
+   ============================================================================ */
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.settings-section-title {
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-sm) 0;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ============================================================================
+   SETTINGS OPTION
+   Individual setting with toggle and description
+   ============================================================================ */
+
+.settings-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-base);
+}
+
+.settings-option:focus-within {
+  border-color: var(--brand-teal);
+  background-color: rgba(56, 189, 153, 0.05);
+}
+
+body.dark-mode .settings-option:focus-within {
+  background-color: rgba(245, 192, 110, 0.05);
+}
+
+/* ============================================================================
+   TOGGLE SWITCH STYLES
+   Custom checkbox toggle with visual switch indicator
+   ============================================================================ */
+
+.settings-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.settings-toggle-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.settings-toggle-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  width: 52px;
+  height: 28px;
+}
+
+.toggle-switch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--text-tertiary);
+  border-radius: 9999px;
+  transition: background-color var(--transition-base);
+  border: 2px solid transparent;
+}
+
+.toggle-switch::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: left var(--transition-base);
+}
+
+/* Checked state */
+.settings-toggle-input:checked + .settings-toggle-label .toggle-switch {
+  background-color: var(--brand-teal);
+}
+
+.settings-toggle-input:checked + .settings-toggle-label .toggle-switch::before {
+  left: calc(100% - 22px);
+}
+
+/* Hover state */
+.settings-toggle-label:hover .toggle-switch {
+  box-shadow: 0 0 0 4px rgba(56, 189, 153, 0.2);
+}
+
+/* Focus state */
+.settings-toggle-input:focus-visible + .settings-toggle-label {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-md);
+}
+
+/* Dark mode toggle color */
+body.dark-mode .settings-toggle-input:checked + .settings-toggle-label .toggle-switch {
+  background-color: var(--brand-gold);
+}
+
+body.dark-mode .settings-toggle-label:hover .toggle-switch {
+  box-shadow: 0 0 0 4px rgba(245, 192, 110, 0.2);
+}
+
+body.dark-mode .settings-toggle-input:focus-visible + .settings-toggle-label {
+  outline-color: var(--brand-gold);
+}
+
+/* ============================================================================
+   OPTION TEXT & LABELS
+   Description and labels for settings
+   ============================================================================ */
+
+.settings-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.settings-option-label {
+  font-weight: var(--font-weight-semibold);
+  font-size: 1rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  margin: 0;
+  transition: color var(--transition-base);
+}
+
+.settings-option:hover .settings-option-label {
+  color: var(--brand-teal);
+}
+
+body.dark-mode .settings-option:hover .settings-option-label {
+  color: var(--brand-gold);
+}
+
+.settings-option-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+  transition: color var(--transition-base);
+}
+
+/* ============================================================================
+   DIVIDER
+   Visual separator between sections
+   ============================================================================ */
+
+.settings-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: var(--spacing-md) 0;
+}
+
+/* ============================================================================
+   MODAL FOOTER
+   Footer info message
+   ============================================================================ */
+
+.settings-modal-footer {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  background-color: rgba(56, 189, 153, 0.05);
+  flex-shrink: 0;
+}
+
+.settings-info-text {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
+
+body.dark-mode .settings-modal-footer {
+  background-color: rgba(245, 192, 110, 0.05);
+}
+
+/* ============================================================================
+   ACCESSIBILITY - REDUCED MOTION
+   Respect user's prefers-reduced-motion preference
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-modal-overlay {
+    animation: none;
+  }
+
+  .settings-modal-content {
+    animation: none;
+  }
+
+  .settings-option {
+    transition: none;
+  }
+
+  .toggle-switch,
+  .toggle-switch::before,
+  .settings-option-label {
+    transition: none;
+  }
+
+  .settings-modal-close {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY - HIGH CONTRAST MODE
+   Enhanced styling for users who prefer high contrast
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  .settings-modal-header {
+    border-bottom-width: 3px;
+  }
+
+  .settings-modal-close:focus-visible {
+    outline-width: 4px;
+  }
+
+  .settings-section-title {
+    border-bottom-width: 2px;
+    font-weight: var(--font-weight-extra-bold);
+  }
+
+  .settings-option {
+    border-width: 2px;
+  }
+
+  .toggle-switch {
+    border-width: 3px;
+  }
+
+  .settings-option-label {
+    font-weight: var(--font-weight-extra-bold);
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MOBILE
+   Adjust layout for mobile devices (max-width: 480px)
+   ============================================================================ */
+
+@media (max-width: 480px) {
+  .settings-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .settings-modal-content {
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    max-height: 80vh;
+  }
+
+  .settings-modal-header {
+    padding: var(--spacing-md);
+  }
+
+  .settings-modal-title {
+    font-size: 1.25rem;
+  }
+
+  .settings-modal-body {
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+
+  .settings-option {
+    padding: var(--spacing-md);
+  }
+}
+
+/* ============================================================================
+   DARK MODE ADJUSTMENTS
+   Ensure proper contrast and visibility in dark mode
+   ============================================================================ */
+
+body.dark-mode .settings-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .settings-option {
+  background-color: var(--bg-secondary);
+}
+
+body.dark-mode .settings-option:focus-within {
+  background-color: rgba(245, 192, 110, 0.05);
+}
+
+/* ============================================================================
+   CLEAR VIEW MODE ADJUSTMENTS
+   Maximum contrast and accessibility
+   ============================================================================ */
+
+body.clear-mode .settings-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+body.clear-mode .settings-modal-content {
+  background-color: #ffffff;
+  border: 3px solid #000000;
+}
+
+body.clear-mode .settings-modal-header {
+  border-bottom: 3px solid #000000;
+}
+
+body.clear-mode .settings-option {
+  background-color: #ffffff;
+  border: 2px solid #000000;
+}
+
+body.clear-mode .settings-option:focus-within {
+  background-color: #f0f0f0;
+  border-color: #0d7d63;
+}

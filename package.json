@@ -1,0 +1,9 @@
+{
+  "name": "outatlas",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build:web": "npm run build --workspace=packages/web",
+    "build:ext": "npm run build --workspace=packages/extension"
+  }
+}
