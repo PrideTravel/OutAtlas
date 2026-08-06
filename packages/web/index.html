@@ -242,6 +242,100 @@
             display: block;
         }
 
+        /* ===== BOTTOM TAB NAV ===== */
+        #bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-around;
+            align-items: stretch;
+            height: 64px;
+            padding-bottom: env(safe-area-inset-bottom);
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        html.dark #bottom-nav {
+            background: #0f172a;
+            border-top-color: #1e293b;
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            flex: 1;
+            font-size: 10px;
+            font-weight: 600;
+            color: #94a3b8;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            padding: 8px 4px 10px;
+            transition: color 0.15s ease;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+            font-family: inherit;
+        }
+
+        html.dark .nav-item {
+            color: #64748b;
+        }
+
+        .nav-item span.material-symbols-outlined {
+            font-size: 22px;
+            line-height: 1;
+            transition: transform 0.15s ease;
+        }
+
+        .nav-item.active-nav {
+            color: #f20d8f;
+        }
+
+        html.dark .nav-item.active-nav {
+            color: #f20d8f;
+        }
+
+        .nav-item.active-nav span.material-symbols-outlined {
+            transform: translateY(-1px);
+        }
+
+        /* Pride rainbow indicator bar on the active tab */
+        .nav-item.active-nav::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: linear-gradient(to right, #FF0018, #FFA52C, #eab308, #008018, #0000F9, #86007D);
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* On wider screens, constrain nav to match content width */
+        @media (min-width: 768px) {
+            #bottom-nav {
+                max-width: 64rem;
+                left: 50%;
+                transform: translateX(-50%);
+                border-left: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
+                border-radius: 0;
+            }
+
+            html.dark #bottom-nav {
+                border-left-color: #1e293b;
+                border-right-color: #1e293b;
+            }
+        }
+
         /* ===== PRIDE SCOUT AUTH STYLES ===== */
         #ps-auth-modal-backdrop {
             display: none;
@@ -819,19 +913,22 @@
     <header
         class="sticky top-0 z-50 bg-background-light dark:bg-slate-900/80 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b"
         style="border-bottom: 8px solid; border-image: linear-gradient(to right, #FF0018, #FFA52C, #FFFF41, #008018, #0000F9, #86007D) 1;">
-        <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-            onclick="toggleView('homeView')" title="Back to Home">
-            <div class="w-8 h-8 rounded-lg pride-gradient-bg flex items-center justify-center shadow-lg">
-                <span class="material-symbols-outlined text-white text-xl font-black">flight_takeoff</span>
+        <!-- Populated by renderHeader() on each view change -->
+        <div id="header-left" class="flex items-center gap-2">
+            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="toggleView('homeView')" title="Back to Home">
+                <div class="w-8 h-8 rounded-lg pride-gradient-bg flex items-center justify-center shadow-lg">
+                    <span class="material-symbols-outlined text-white text-xl font-black">flight_takeoff</span>
+                </div>
+                <h1 class="text-xl font-extrabold tracking-tight inline-block dark-pill"><span
+                        class="outatlas-name-text">OutAtlas</span></h1>
             </div>
-            <h1 class="text-xl font-extrabold tracking-tight inline-block dark-pill"><span
-                    class="outatlas-name-text">OutAtlas</span></h1>
         </div>
     </header>
 
     <main class="max-w-5xl mx-auto mt-6 px-4">
         <!-- View 1: Explore (Home) -->
-        <div id="homeView" class="view-section active space-y-8">
+        <div id="homeView" class="view-section active space-y-8 pb-32">
             <!-- 1. Search & Info Section -->
             <section class="rainbow-card-bg rounded-3xl p-6 shadow-2xl relative overflow-hidden">
                 <!-- Plan Your Journey -->
@@ -1009,7 +1106,59 @@
                 <!-- Randomized Hotspots injected here -->
             </div>
         </div>
+
+        <!-- View: Trips (shell — wired up in Task 2.2) -->
+        <div id="tripView" class="view-section space-y-8 pb-32">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="material-symbols-outlined text-primary text-3xl">luggage</span>
+                <h2 class="text-2xl font-black dark-pill"><span class="pride-gradient-text">My Trips</span></h2>
+            </div>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Your saved and upcoming trips will appear here.</p>
+        </div>
+
+        <!-- View: Profile (shell — wired up in Task 2.3) -->
+        <div id="profileView" class="view-section space-y-8 pb-32">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="material-symbols-outlined text-primary text-3xl">person</span>
+                <h2 class="text-2xl font-black dark-pill"><span class="pride-gradient-text">Profile</span></h2>
+            </div>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Sign in to view your profile and preferences.</p>
+        </div>
+
+        <!-- View: Venue Detail (shell — wired up in Task 2.1) -->
+        <div id="venueDetailView" class="view-section space-y-8 pb-32">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="material-symbols-outlined text-primary text-3xl">location_on</span>
+                <h2 class="text-2xl font-black dark-pill"><span class="pride-gradient-text">Venue Detail</span></h2>
+            </div>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Select a venue from search results to see details.</p>
+        </div>
     </main>
+
+    <!-- Bottom Tab Navigation -->
+    <nav id="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item active-nav" data-view="homeView"
+            onclick="toggleView('homeView', this)" aria-label="Home">
+            <span class="material-symbols-outlined">home</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-view="resultsView"
+            onclick="toggleView('resultsView', this)" aria-label="Explore">
+            <span class="material-symbols-outlined">explore</span>
+            <span>Explore</span>
+        </button>
+        <button class="nav-item" data-view="tripView"
+            onclick="toggleView('tripView', this)" aria-label="Trips">
+            <span class="material-symbols-outlined">luggage</span>
+            <span>Trips</span>
+        </button>
+        <button class="nav-item" data-view="profileView"
+            onclick="toggleView('profileView', this)" aria-label="Profile">
+            <span class="material-symbols-outlined">person</span>
+            <span>Profile</span>
+        </button>
+    </nav>
+
     <!-- Footer / Legal Section -->
     <section class="max-w-5xl mx-auto pt-8 pb-12 px-6 border-t border-slate-200 dark:border-slate-700">
         <h4 class="text-xs font-bold text-slate-700 dark:text-slate-200 mb-4 uppercase tracking-wider">Terms &
@@ -2346,6 +2495,71 @@
             };
 
             // --- VIEW MANAGEMENT ---
+
+            // Hash ↔ viewId mapping (add new views here as they are built)
+            const HASH_TO_VIEW = {
+                'home':     'homeView',
+                'search':   'resultsView',
+                'events':   'eventsOnlyView',
+                'hotspots': 'allHotspotsView',
+                'venue':    'venueDetailView',
+                'trips':    'tripView',
+                'profile':  'profileView',
+            };
+            const VIEW_TO_HASH = Object.fromEntries(
+                Object.entries(HASH_TO_VIEW).map(([h, v]) => [v, h])
+            );
+
+            // Prevents the hashchange listener from re-entering toggleView
+            let _suppressHashChange = false;
+
+            // Per-view header configuration
+            const HEADER_CONFIG = {
+                homeView:        { back: null,           title: null },
+                resultsView:     { back: 'homeView',     title: 'Explore' },
+                eventsOnlyView:  { back: 'homeView',     title: 'Events' },
+                allHotspotsView: { back: 'homeView',     title: 'Safe Hotspots' },
+                venueDetailView: { back: 'resultsView',  title: 'Venue Detail' },
+                tripView:        { back: null,           title: 'My Trips' },
+                profileView:     { back: null,           title: 'Profile' },
+            };
+
+            // Logo HTML reused for the home header slot
+            const LOGO_HTML = `
+                <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+                    onclick="toggleView('homeView')" title="Back to Home">
+                    <div class="w-8 h-8 rounded-lg pride-gradient-bg flex items-center justify-center shadow-lg">
+                        <span class="material-symbols-outlined text-white text-xl font-black">flight_takeoff</span>
+                    </div>
+                    <h1 class="text-xl font-extrabold tracking-tight inline-block dark-pill">
+                        <span class="outatlas-name-text">OutAtlas</span>
+                    </h1>
+                </div>`;
+
+            window.renderHeader = function (viewId, overrideTitle) {
+                const slot = document.getElementById('header-left');
+                if (!slot) return;
+                const cfg = HEADER_CONFIG[viewId] || { back: null, title: null };
+                const title = overrideTitle || cfg.title;
+
+                if (!cfg.back && !title) {
+                    // Home — show logo
+                    slot.innerHTML = LOGO_HTML;
+                } else if (cfg.back) {
+                    // Secondary view — back arrow + title
+                    slot.innerHTML = `
+                        <button class="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                            onclick="toggleView('${cfg.back}')" aria-label="Go back">
+                            <span class="material-symbols-outlined text-primary text-2xl">arrow_back</span>
+                            <span class="text-lg font-extrabold text-slate-800 dark:text-white">${title || ''}</span>
+                        </button>`;
+                } else {
+                    // Primary tab (Trips, Profile) — title only, no back arrow
+                    slot.innerHTML = `
+                        <h1 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">${title || ''}</h1>`;
+                }
+            };
+
             window.toggleView = function (viewId, navEl = null) {
                 const views = document.querySelectorAll('.view-section');
                 views.forEach(v => v.classList.remove('active'));
@@ -2355,18 +2569,48 @@
                     window.scrollTo(0, 0);
                 }
 
-                // Update Bottom Nav state
-                if (navEl) {
-                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('text-primary', 'active-nav'));
-                    document.querySelectorAll('.nav-item').forEach(n => n.classList.add('text-slate-400 dark:text-slate-300'));
-                    navEl.classList.remove('text-slate-400 dark:text-slate-300');
-                    navEl.classList.add('text-primary', 'active-nav');
+                // Sync URL hash so back/forward and shareable links work
+                const hash = VIEW_TO_HASH[viewId];
+                if (hash && location.hash !== '#' + hash) {
+                    _suppressHashChange = true;
+                    location.hash = hash;
+                    setTimeout(() => { _suppressHashChange = false; }, 0);
                 }
+
+                // Sync bottom nav — auto-detect from data-view so hash navigation also updates tabs
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+                const activeNavEl = document.querySelector(`.nav-item[data-view="${viewId}"]`);
+                if (activeNavEl) activeNavEl.classList.add('active-nav');
+
+                // Sync header (back button vs logo vs title)
+                renderHeader(viewId);
             };
 
             window.showView = function (viewId) {
                 toggleView(viewId);
             };
+
+            // Drive view from URL hash (back/forward button support)
+            window.addEventListener('hashchange', function () {
+                if (_suppressHashChange) return;
+                const hash = location.hash.slice(1);
+                const viewId = HASH_TO_VIEW[hash];
+                if (viewId && document.getElementById(viewId)) {
+                    toggleView(viewId);
+                }
+            });
+
+            // On first load: honour any existing hash or default to #home
+            (function initRoute() {
+                const hash = location.hash.slice(1);
+                const viewId = HASH_TO_VIEW[hash];
+                if (viewId && document.getElementById(viewId)) {
+                    toggleView(viewId);
+                } else {
+                    history.replaceState(null, '', '#home');
+                    toggleView('homeView');
+                }
+            })();
 
             window.quickSearch = function (cityName, start, end) {
                 const destInput = document.getElementById('destination');
