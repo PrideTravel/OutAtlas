@@ -1107,22 +1107,112 @@
             </div>
         </div>
 
-        <!-- View: Trips (shell — wired up in Task 2.2) -->
-        <div id="tripView" class="view-section space-y-8 pb-32">
-            <div class="flex items-center gap-3 mb-2">
-                <span class="material-symbols-outlined text-primary text-3xl">luggage</span>
-                <h2 class="text-2xl font-black dark-pill"><span class="pride-gradient-text">My Trips</span></h2>
+        <!-- View: Trips -->
+        <div id="tripView" class="view-section pb-32">
+            <!-- Tab bar -->
+            <div class="flex border-b border-slate-200 dark:border-slate-700 mb-5">
+                <button id="tv-tab-saved" onclick="tvSwitchTab('saved')"
+                    class="flex-1 py-3 text-sm font-bold border-b-2 border-primary transition-colors" style="color:#f20d8f">
+                    ✈️ Saved
+                </button>
+                <button id="tv-tab-confirmed" onclick="tvSwitchTab('confirmed')"
+                    class="flex-1 py-3 text-sm font-bold border-b-2 border-transparent text-slate-400 dark:text-slate-500 transition-colors">
+                    🚀 Confirmed
+                </button>
             </div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Your saved and upcoming trips will appear here.</p>
+
+            <!-- Signed-out prompt (shown when not authenticated) -->
+            <div id="tv-signin-prompt" style="display:none" class="text-center py-12">
+                <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 block mb-3" style="font-size:3rem">luggage</span>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Sign in to view and manage your trips.</p>
+                <button onclick="psOpenModal()" class="px-5 py-2 rounded-full text-sm font-bold text-white"
+                    style="background:linear-gradient(90deg,#f20d8f,#86007D)">🏳️‍🌈 Sign In</button>
+            </div>
+
+            <!-- Saved tab panel (contains the list that psLoadTrips() populates) -->
+            <div id="tv-panel-saved">
+                <div id="ps-trips-list">
+                    <p class="text-slate-400 dark:text-slate-500 text-sm text-center py-8">Loading…</p>
+                </div>
+            </div>
+
+            <!-- Confirmed tab panel -->
+            <div id="tv-panel-confirmed" style="display:none">
+                <div id="ps-leaving-soon-section" style="margin-bottom:2rem;display:none">
+                    <h3 style="font-weight:700;font-size:.95rem;color:#f20d8f;margin-bottom:.75rem">🚀 Leaving Soon (Next 30 Days)</h3>
+                    <div id="ps-leaving-soon-container" style="display:flex;flex-direction:column;gap:.75rem"></div>
+                </div>
+                <div id="ps-future-trips-section" style="margin-bottom:2rem;display:none">
+                    <h3 style="font-weight:700;font-size:.95rem;color:#f20d8f;margin-bottom:.75rem">📅 Future Trips (30–90 Days)</h3>
+                    <div id="ps-future-trips-container" style="display:flex;flex-direction:column;gap:.75rem"></div>
+                </div>
+                <div id="ps-past-trips-section" style="margin-bottom:2rem;display:none">
+                    <h3 style="font-weight:700;font-size:.95rem;color:#999;margin-bottom:.75rem">📸 Past Adventures</h3>
+                    <div id="ps-past-trips-container" style="display:flex;flex-direction:column;gap:.75rem"></div>
+                </div>
+                <p id="ps-no-confirmed-trips" class="text-slate-400 dark:text-slate-500 text-sm text-center py-8">No confirmed trips yet. Save a trip and confirm it!</p>
+            </div>
         </div>
 
-        <!-- View: Profile (shell — wired up in Task 2.3) -->
-        <div id="profileView" class="view-section space-y-8 pb-32">
-            <div class="flex items-center gap-3 mb-2">
-                <span class="material-symbols-outlined text-primary text-3xl">person</span>
-                <h2 class="text-2xl font-black dark-pill"><span class="pride-gradient-text">Profile</span></h2>
+        <!-- View: Profile -->
+        <div id="profileView" class="view-section pb-32">
+            <!-- Signed-out state -->
+            <div id="pv-signedout" style="display:none" class="text-center py-14">
+                <div class="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl"
+                    style="background:linear-gradient(135deg,#f20d8f22,#86007d22)">
+                    <span class="material-symbols-outlined text-primary" style="font-size:2.5rem">person</span>
+                </div>
+                <p class="text-slate-700 dark:text-slate-300 font-bold mb-1">Not signed in</p>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mb-5">Sign in to manage your trips and preferences.</p>
+                <button onclick="psOpenModal()" class="px-6 py-2.5 rounded-full text-sm font-bold text-white"
+                    style="background:linear-gradient(90deg,#f20d8f,#86007D)">🏳️‍🌈 Sign In</button>
             </div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Sign in to view your profile and preferences.</p>
+
+            <!-- Signed-in state -->
+            <div id="pv-signedin" style="display:none">
+                <!-- Avatar + name card -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6 mb-4 flex items-center gap-4">
+                    <div id="pv-avatar" class="w-16 h-16 rounded-full flex items-center justify-center text-white font-black text-xl flex-shrink-0"
+                        style="background:linear-gradient(135deg,#f20d8f,#86007D)">?</div>
+                    <div class="min-w-0">
+                        <p id="pv-name" class="font-black text-slate-900 dark:text-white text-lg leading-tight truncate">—</p>
+                        <p id="pv-email" class="text-slate-500 dark:text-slate-400 text-sm truncate mt-0.5">—</p>
+                    </div>
+                </div>
+
+                <!-- Stats row -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 text-center">
+                        <p id="pv-saved-count" class="text-3xl font-black" style="color:#f20d8f">0</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Saved Trips</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 text-center">
+                        <p id="pv-confirmed-count" class="text-3xl font-black" style="color:#86007D">0</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Confirmed</p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-col gap-3">
+                    <button onclick="toggleView('tripView')"
+                        class="w-full flex items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 hover:border-primary/40 transition-colors text-left">
+                        <span class="material-symbols-outlined text-primary">luggage</span>
+                        <span class="font-bold text-slate-800 dark:text-white text-sm">My Trips</span>
+                        <span class="material-symbols-outlined text-slate-400 ml-auto text-base">chevron_right</span>
+                    </button>
+                    <button onclick="openSettingsModal()"
+                        class="w-full flex items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 hover:border-primary/40 transition-colors text-left">
+                        <span class="material-symbols-outlined text-slate-500">settings</span>
+                        <span class="font-bold text-slate-800 dark:text-white text-sm">Settings</span>
+                        <span class="material-symbols-outlined text-slate-400 ml-auto text-base">chevron_right</span>
+                    </button>
+                    <button onclick="psSignOut()"
+                        class="w-full flex items-center gap-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm px-5 py-4 hover:border-red-200 transition-colors text-left">
+                        <span class="material-symbols-outlined text-red-500">logout</span>
+                        <span class="font-bold text-red-500 text-sm">Sign Out</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- View: Venue Detail (populated by showVenueDetail()) -->
@@ -1294,10 +1384,7 @@
                         style="background:none;border:none;cursor:pointer;font-size:1.3rem;color:#888;padding:0.5rem;min-width:2.5rem;min-height:2.5rem;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;margin:-0.5rem;">&#x2715;</button>
                 </div>
             </div>
-            <div id="ps-trips-list">
-                <p style="color:#aaa;font-size:.9rem;text-align:center;padding:2rem 0;">No saved trips yet. Search for a
-                    destination and tap Save Trip!</p>
-            </div>
+            <!-- Trip list lives in #tripView → #ps-trips-list -->
         </div>
     </div>
 
@@ -1317,25 +1404,7 @@
                 </div>
             </div>
 
-            <!-- Leaving Soon Section -->
-            <div id="ps-leaving-soon-section" style="margin-bottom:2rem;display:none;">
-                <h3 style="font-weight:700;font-size:.95rem;color:#f20d8f;margin-bottom:.75rem;">🚀 Leaving Soon (Next 30 Days)</h3>
-                <div id="ps-leaving-soon-container" style="display:flex;flex-direction:column;gap:.75rem;"></div>
-            </div>
-
-            <!-- Future Trips Section -->
-            <div id="ps-future-trips-section" style="margin-bottom:2rem;display:none;">
-                <h3 style="font-weight:700;font-size:.95rem;color:#f20d8f;margin-bottom:.75rem;">📅 Future Trips (30-90 Days)</h3>
-                <div id="ps-future-trips-container" style="display:flex;flex-direction:column;gap:.75rem;"></div>
-            </div>
-
-            <!-- Past Trips Section -->
-            <div id="ps-past-trips-section" style="margin-bottom:2rem;display:none;">
-                <h3 style="font-weight:700;font-size:.95rem;color:#999;margin-bottom:.75rem;">📸 Past Adventures</h3>
-                <div id="ps-past-trips-container" style="display:flex;flex-direction:column;gap:.75rem;"></div>
-            </div>
-
-            <p id="ps-no-confirmed-trips" style="color:#aaa;font-size:.9rem;text-align:center;padding:2rem 0;">No confirmed trips yet. Save a trip and confirm it!</p>
+            <!-- Confirmed trip sections live in #tripView → #tv-panel-confirmed -->
         </div>
     </div>
 
@@ -1366,6 +1435,12 @@
             auth.onAuthStateChanged(async (user) => {
                 currentUser = user;
                 renderUserBtn(user);
+                // Refresh view-based UI if auth state changes while those views are active
+                const activeView = document.querySelector('.view-section.active');
+                if (activeView) {
+                    if (activeView.id === 'profileView') renderProfileView();
+                    if (activeView.id === 'tripView') renderTripView();
+                }
                 if (user) {
                     await refreshSavedIds();
 
@@ -1400,6 +1475,9 @@
                     }
 
                     refreshSaveButtons();
+                    // Update profile count badge now that savedTripIds is populated
+                    const savedCountEl = document.getElementById('pv-saved-count');
+                    if (savedCountEl) savedCountEl.textContent = savedTripIds.size;
                 }
                 else { savedTripIds.clear(); refreshSaveButtons(); }
             });
@@ -2116,20 +2194,19 @@
                 });
             }
 
-            // Trips panel
+            // Trips panel — promoted to full-page tripView
             window.psTripPanel = function (open) {
-                document.getElementById('ps-trips-panel').classList[open ? 'add' : 'remove']('open');
                 document.getElementById('ps-user-dropdown')?.classList.remove('open');
-                if (open) psLoadTrips();
+                if (open) { toggleView('tripView'); tvSwitchTab('saved'); }
             };
             window.psCloseTripPanel = function (e) {
-                if (e.target === document.getElementById('ps-trips-panel')) psTripPanel(false);
+                // no-op: panels are no longer slide-up overlays
             };
 
             window.psOpenUpcomingTripsPanel = function () {
-                document.getElementById('ps-upcoming-trips-panel').classList.add('open');
                 document.getElementById('ps-user-dropdown')?.classList.remove('open');
-                psLoadUpcomingTrips();
+                toggleView('tripView');
+                tvSwitchTab('confirmed');
             };
 
             window.psCloseUpcomingTripsPanel = function (e) {
@@ -2148,13 +2225,86 @@
                 }
             });
 
-            window.psToggleTripPanelFullscreen = function () {
-                document.getElementById('ps-trips-panel').classList.toggle('fullscreen');
+            window.psToggleTripPanelFullscreen = function () { /* no-op */ };
+            window.psToggleUpcomingTripsFullscreen = function () { /* no-op */ };
+
+            // Tab switcher for #tripView
+            window.tvSwitchTab = function (tab) {
+                const savedPanel = document.getElementById('tv-panel-saved');
+                const confirmedPanel = document.getElementById('tv-panel-confirmed');
+                const tabSaved = document.getElementById('tv-tab-saved');
+                const tabConfirmed = document.getElementById('tv-tab-confirmed');
+                if (!savedPanel || !confirmedPanel) return;
+                const isSaved = tab === 'saved';
+                savedPanel.style.display = isSaved ? '' : 'none';
+                confirmedPanel.style.display = isSaved ? 'none' : '';
+                // Active tab: colored + bottom border; inactive: muted
+                tabSaved.style.color = isSaved ? '#f20d8f' : '';
+                tabSaved.classList.toggle('border-primary', isSaved);
+                tabSaved.classList.toggle('border-transparent', !isSaved);
+                tabSaved.classList.toggle('text-slate-400', !isSaved);
+                tabConfirmed.style.color = !isSaved ? '#f20d8f' : '';
+                tabConfirmed.classList.toggle('border-primary', !isSaved);
+                tabConfirmed.classList.toggle('border-transparent', isSaved);
+                tabConfirmed.classList.toggle('text-slate-400', isSaved);
             };
 
-            window.psToggleUpcomingTripsFullscreen = function () {
-                document.getElementById('ps-upcoming-trips-panel').classList.toggle('fullscreen');
-            };
+            // Load both trip panels when tripView becomes active
+            function renderTripView() {
+                const signInPrompt = document.getElementById('tv-signin-prompt');
+                const savedPanel = document.getElementById('tv-panel-saved');
+                const confirmedPanel = document.getElementById('tv-panel-confirmed');
+                if (!currentUser) {
+                    if (signInPrompt) signInPrompt.style.display = '';
+                    if (savedPanel) savedPanel.style.display = 'none';
+                    if (confirmedPanel) confirmedPanel.style.display = 'none';
+                    document.getElementById('tv-tab-saved') && (document.getElementById('tv-tab-saved').style.display = 'none');
+                    document.getElementById('tv-tab-confirmed') && (document.getElementById('tv-tab-confirmed').style.display = 'none');
+                    return;
+                }
+                if (signInPrompt) signInPrompt.style.display = 'none';
+                document.getElementById('tv-tab-saved') && (document.getElementById('tv-tab-saved').style.display = '');
+                document.getElementById('tv-tab-confirmed') && (document.getElementById('tv-tab-confirmed').style.display = '');
+                // Show saved panel by default if no tab is already active
+                const confirmedVisible = confirmedPanel && confirmedPanel.style.display !== 'none';
+                if (!confirmedVisible) {
+                    if (savedPanel) savedPanel.style.display = '';
+                    if (confirmedPanel) confirmedPanel.style.display = 'none';
+                }
+                psLoadTrips();
+                psLoadUpcomingTrips();
+            }
+
+            // Populate #profileView with user info + trip counts
+            function renderProfileView() {
+                const signedOut = document.getElementById('pv-signedout');
+                const signedIn = document.getElementById('pv-signedin');
+                if (!signedOut || !signedIn) return;
+                if (!currentUser) {
+                    signedOut.style.display = '';
+                    signedIn.style.display = 'none';
+                    return;
+                }
+                signedOut.style.display = 'none';
+                signedIn.style.display = '';
+                const initials = getUserInitials(currentUser);
+                const avatar = document.getElementById('pv-avatar');
+                if (avatar) avatar.textContent = initials;
+                const nameEl = document.getElementById('pv-name');
+                if (nameEl) nameEl.textContent = currentUser.displayName || currentUser.email || 'Traveler';
+                const emailEl = document.getElementById('pv-email');
+                if (emailEl) emailEl.textContent = currentUser.email || '';
+                // Trip counts from in-memory set (refreshed on auth)
+                const savedCount = document.getElementById('pv-saved-count');
+                if (savedCount) savedCount.textContent = savedTripIds.size;
+                // Confirmed count: query Firestore
+                db.collection('users').doc(currentUser.uid).collection('trips')
+                    .where('confirmed', '==', true).get()
+                    .then(snap => {
+                        const el = document.getElementById('pv-confirmed-count');
+                        if (el) el.textContent = snap.size;
+                    }).catch(() => {});
+            }
 
             async function psLoadUpcomingTrips() {
                 if (!currentUser) return;
@@ -2240,12 +2390,9 @@
             }
 
             function psRefreshAllCountdowns() {
-                // Refresh countdowns in trip panel
-                if (document.getElementById('ps-trips-panel').classList.contains('open')) {
+                // Refresh countdowns when tripView is the active view
+                if (document.getElementById('tripView')?.classList.contains('active')) {
                     psLoadTrips();
-                }
-                // Refresh countdowns in upcoming trips panel
-                if (document.getElementById('ps-upcoming-trips-panel').classList.contains('open')) {
                     psLoadUpcomingTrips();
                 }
             }
@@ -2612,6 +2759,10 @@
 
                 // Sync header (back button vs logo vs title)
                 renderHeader(viewId);
+
+                // View-specific lifecycle hooks
+                if (viewId === 'tripView') renderTripView();
+                if (viewId === 'profileView') renderProfileView();
             };
 
             window.showView = function (viewId) {
