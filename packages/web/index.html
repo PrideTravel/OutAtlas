@@ -1125,13 +1125,41 @@
             <p class="text-slate-500 dark:text-slate-400 text-sm">Sign in to view your profile and preferences.</p>
         </div>
 
-        <!-- View: Venue Detail (shell — wired up in Task 2.1) -->
-        <div id="venueDetailView" class="view-section space-y-8 pb-32">
-            <div class="flex items-center gap-3 mb-2">
-                <span class="material-symbols-outlined text-primary text-3xl">location_on</span>
-                <h2 class="text-2xl font-black dark-pill"><span class="pride-gradient-text">Venue Detail</span></h2>
+        <!-- View: Venue Detail (populated by showVenueDetail()) -->
+        <div id="venueDetailView" class="view-section space-y-5 pb-32">
+            <!-- Hero card: icon + name + badges + tags -->
+            <div id="vd-hero" class="bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-md p-6">
+                <div class="flex items-start gap-4">
+                    <div id="vd-icon-wrap" class="w-14 h-14 rounded-xl flex items-center justify-center text-white flex-shrink-0 shadow-lg" style="background:#f20d8f;">
+                        <span id="vd-icon" class="material-symbols-outlined text-3xl">location_on</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 id="vd-name" class="text-xl font-black text-slate-900 dark:text-white break-words leading-snug mb-2">—</h2>
+                        <div id="vd-badges" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+                <div id="vd-tags" class="flex flex-wrap gap-2 mt-4"></div>
             </div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Select a venue from search results to see details.</p>
+
+            <!-- City context row -->
+            <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary text-2xl flex-shrink-0">location_city</span>
+                <div class="min-w-0">
+                    <p id="vd-city" class="font-bold text-slate-800 dark:text-white text-sm truncate">—</p>
+                    <p id="vd-subtext" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">—</p>
+                </div>
+            </div>
+
+            <!-- Action buttons: Google Maps + Google Search -->
+            <div id="vd-actions" class="grid grid-cols-2 gap-3"></div>
+
+            <!-- Map placeholder -->
+            <div class="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                <div id="vd-map-link" class="h-36 flex flex-col items-center justify-center gap-2 text-slate-400 dark:text-slate-500 hover:text-primary dark:hover:text-primary transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-4xl">map</span>
+                    <span class="text-sm font-semibold">Search on Google Maps</span>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -2612,6 +2640,94 @@
                 }
             })();
 
+            // --- VENUE DETAIL ---
+
+            const VENUE_CATEGORY_ICON  = { hotel: 'hotel', bar: 'local_bar', restaurant: 'restaurant', store: 'shopping_bag', sauna: 'hot_tub', tour: 'explore', venue: 'location_on' };
+            const VENUE_CATEGORY_COLOR = { hotel: '#0d7d63', bar: '#7c3aed', restaurant: '#ea580c', store: '#16a34a', sauna: '#dc2626', tour: '#2563eb', venue: '#f20d8f' };
+            const VENUE_CATEGORY_LABEL = { hotel: 'Hotel', bar: 'Bar / Nightlife', restaurant: 'Restaurant', store: 'Shop / Store', sauna: 'Sauna / Bathhouse', tour: 'Tour / Experience', venue: 'Venue' };
+
+            function classifyVenue(v) {
+                const t = (v.type || '').toLowerCase();
+                // style field is exclusive to tours; guard against bar/club having style too
+                if (v.style !== undefined && !t.includes('bar') && !t.includes('club')) return 'tour';
+                if (t.includes('sauna') || t.includes('bath'))                          return 'sauna';
+                if (t.includes('store') || t.includes('shop'))                          return 'store';
+                if (t.includes('restaurant') || t.includes('cafe') || t.includes('bistro') || t.includes('diner') || t.includes('bakery') || t.includes('dining')) return 'restaurant';
+                if (t.includes('bar') || t.includes('club') || t.includes('disco') || t.includes('lounge') || t.includes('cruising')) return 'bar';
+                if (t.includes('hotel') || t.includes('hostel') || t.includes('resort') || t.includes('inn') || t.includes('boutique') || ['budget','moderate','luxury','mid-priced','mid-priced'].includes(t)) return 'hotel';
+                return 'venue';
+            }
+
+            window.showVenueDetail = function (venueObj, destName, sourceView) {
+                if (!venueObj || !venueObj.name) return;
+
+                const cat   = classifyVenue(venueObj);
+                const color = VENUE_CATEGORY_COLOR[cat];
+
+                // Patch HEADER_CONFIG so toggleView renders the right back target + title
+                HEADER_CONFIG.venueDetailView.back  = sourceView || 'resultsView';
+                HEADER_CONFIG.venueDetailView.title = venueObj.name;
+
+                // Icon
+                const iconWrap = document.getElementById('vd-icon-wrap');
+                if (iconWrap) iconWrap.style.background = color;
+                const iconEl = document.getElementById('vd-icon');
+                if (iconEl) iconEl.textContent = VENUE_CATEGORY_ICON[cat];
+
+                // Name
+                const nameEl = document.getElementById('vd-name');
+                if (nameEl) nameEl.textContent = venueObj.name;
+
+                // Badges: category + LGBTQ+ + price tier
+                const priceLevels = ['Budget', 'Mid-priced', 'Mid-Priced', 'Moderate', 'Luxury'];
+                const priceRaw    = venueObj.price || venueObj.pricing || (priceLevels.includes(venueObj.type) ? venueObj.type : null);
+                const showPrice   = priceRaw && priceLevels.includes(priceRaw);
+                const isLgbtq     = (venueObj.tags || []).some(tg => /lgbtq|gay|queer|rainbow/i.test(tg));
+                const badgesEl    = document.getElementById('vd-badges');
+                if (badgesEl) badgesEl.innerHTML = [
+                    `<span class="text-xs font-bold px-3 py-1 rounded-full text-white" style="background:${color}">${VENUE_CATEGORY_LABEL[cat]}</span>`,
+                    isLgbtq  ? `<span class="text-xs font-bold px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white">🏳️‍🌈 LGBTQ+</span>` : '',
+                    showPrice ? `<span class="text-xs font-bold px-3 py-1 rounded-full text-white" style="background:#0d7d63;">${priceRaw}</span>` : '',
+                ].join('');
+
+                // Tags (skip ones already shown as badges)
+                const skipPattern = /lgbtq|gay|queer|rainbow|world rainbow|iglta|budget|moderate|luxury|mid-pric/i;
+                const displayTags = (venueObj.tags || []).filter(tg => !skipPattern.test(tg));
+                const tagsEl = document.getElementById('vd-tags');
+                if (tagsEl) tagsEl.innerHTML = displayTags.map(tg =>
+                    `<span class="text-xs font-medium px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${tg}</span>`
+                ).join('');
+
+                // City + subtext
+                const cityEl = document.getElementById('vd-city');
+                if (cityEl) cityEl.textContent = destName || '—';
+                const subEl = document.getElementById('vd-subtext');
+                if (subEl) subEl.textContent = venueObj.style ? `Style: ${venueObj.style}` : venueObj.type || VENUE_CATEGORY_LABEL[cat];
+
+                // Action buttons
+                const city1 = destName ? destName.split(',')[0].trim() : '';
+                const qSearch = encodeURIComponent(`${venueObj.name} ${city1}`);
+                const qMaps   = encodeURIComponent(`${venueObj.name} ${destName || city1}`);
+                const actionsEl = document.getElementById('vd-actions');
+                if (actionsEl) actionsEl.innerHTML = `
+                    <a href="https://www.google.com/maps/search/${qMaps}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm text-white shadow-md active:scale-95 transition-transform"
+                       style="background:#4285f4;">
+                        <span class="material-symbols-outlined text-[18px]">map</span> Google Maps
+                    </a>
+                    <a href="https://www.google.com/search?q=${qSearch}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white shadow-md hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors active:scale-95">
+                        <span class="material-symbols-outlined text-[18px]">search</span> Google
+                    </a>`;
+
+                // Map placeholder — tap goes to Google Maps
+                const mapLink = document.getElementById('vd-map-link');
+                if (mapLink) mapLink.onclick = () => window.open(`https://www.google.com/maps/search/${qMaps}`, '_blank');
+
+                // Navigate (header is updated via HEADER_CONFIG patch above)
+                toggleView('venueDetailView');
+            };
+
             window.quickSearch = function (cityName, start, end) {
                 const destInput = document.getElementById('destination');
                 const dateStartInput = document.getElementById('dateStart');
@@ -3214,7 +3330,7 @@
                                                         <span class="material-symbols-outlined text-[20px]">hotel</span>
                                                     </button>
                                                     <div class="flex-1 min-w-0">
-                                                        <span class="font-black text-slate-800 dark:text-slate-100 leading-tight text-lg block break-words">${h.name}</span>
+                                                        <span class="font-black text-slate-800 dark:text-slate-100 leading-tight text-lg block break-words cursor-pointer hover:text-primary transition-colors" onclick="showVenueDetail(${JSON.stringify(h).replace(/"/g,'&quot;')}, '${data.name.replace(/'/g, "\\'")}', 'resultsView')">${h.name}</span>
                                                         <div class="flex flex-wrap gap-2 mt-2">
                                                             ${primaryBadge ? `<span class="text-[10px] font-bold px-3 py-1 rounded-full break-words ${badgeColor}">${primaryBadge}</span>` : ''}
                                                             ${tagInfo.priceTag ? `<span class="text-[10px] font-bold px-3 py-1 rounded-lg break-words text-black dark:text-white" style="background-color: #0d7d63;">${tagInfo.priceTag}</span>` : ''}
@@ -3353,7 +3469,7 @@
                                                 ${icon}
                                             </div>
                                             <!-- Line 2: Name -->
-                                            <p class="font-bold group-hover:text-white text-black break-words mb-1" style="color: black !important;">${n.name}</p>
+                                            <p class="font-bold group-hover:text-white text-black break-words mb-1 cursor-pointer hover:underline" style="color: black !important;" onclick="showVenueDetail(${JSON.stringify(n).replace(/"/g,'&quot;')}, '${data.name.replace(/'/g, "\\'")}', 'resultsView')">${n.name}</p>
                                             <!-- Line 3: Tag -->
                                             <p class="text-xs text-slate-700 dark:text-slate-300 dark:text-slate-300 group-hover:text-white break-words mb-3">${n.type}${firstTag ? ' &bull; ' + firstTag : ''}</p>
                                             <!-- Line 4: Actions -->
@@ -3395,7 +3511,7 @@
                                                 ${icon}
                                             </div>
                                             <!-- Line 2: Name -->
-                                            <p class="font-bold group-hover:text-white text-black break-words mb-1" style="color: black !important;">${n.name}</p>
+                                            <p class="font-bold group-hover:text-white text-black break-words mb-1 cursor-pointer hover:underline" style="color: black !important;" onclick="showVenueDetail(${JSON.stringify(n).replace(/"/g,'&quot;')}, '${data.name.replace(/'/g, "\\'")}', 'resultsView')">${n.name}</p>
                                             <!-- Line 3: Tag -->
                                             <p class="text-xs text-slate-700 dark:text-slate-300 dark:text-slate-300 group-hover:text-white break-words mb-3">${n.type}${firstTag ? ' &bull; ' + firstTag : ''}</p>
                                             <!-- Line 4: Bookmark -->
@@ -3437,7 +3553,7 @@
                                                 ${icon}
                                             </div>
                                             <!-- Line 2: Name -->
-                                            <p class="font-bold group-hover:text-white text-black break-words mb-1" style="color: black !important;">${n.name}</p>
+                                            <p class="font-bold group-hover:text-white text-black break-words mb-1 cursor-pointer hover:underline" style="color: black !important;" onclick="showVenueDetail(${JSON.stringify(n).replace(/"/g,'&quot;')}, '${data.name.replace(/'/g, "\\'")}', 'resultsView')">${n.name}</p>
                                             <!-- Line 3: Tag -->
                                             <p class="text-xs text-slate-700 dark:text-slate-300 dark:text-slate-300 group-hover:text-white break-words mb-3">${n.type}${firstTag ? ' &bull; ' + firstTag : ''}</p>
                                             <!-- Line 4: Actions -->
@@ -3483,7 +3599,7 @@
                                                 ${icon}
                                             </div>
                                             <!-- Line 2: Name -->
-                                            <p class="font-bold group-hover:text-white text-black break-words mb-1" style="color: black !important;">${r.name}</p>
+                                            <p class="font-bold group-hover:text-white text-black break-words mb-1 cursor-pointer hover:underline" style="color: black !important;" onclick="showVenueDetail(${JSON.stringify(r).replace(/"/g,'&quot;')}, '${data.name.replace(/'/g, "\\'")}', 'resultsView')">${r.name}</p>
                                             <!-- Line 3: Tag -->
                                             <p class="text-xs text-slate-700 dark:text-slate-300 dark:text-slate-300 group-hover:text-white break-words mb-3">${r.type}${firstTag ? ' &bull; ' + firstTag : ''}</p>
                                             <!-- Line 4: Actions -->
@@ -3686,7 +3802,7 @@
                                 const isThisLgbtqTour = isLgbtqTour(t);
                                 const isTourHidden = tourIdx >= randomTours.length;
                                 return `
-                                    <div class="${isTourHidden ? 'view-more-item hidden' : ''} flex gap-4 items-center bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm group cursor-pointer border-4 ${isThisLgbtqTour ? 'border-pride-purple/30 bg-gradient-to-r from-white to-purple-50 dark:from-slate-800 dark:to-purple-950/20' : 'border-slate-100 dark:border-slate-700'} hover:border-primary/20">
+                                    <div class="${isTourHidden ? 'view-more-item hidden' : ''} flex gap-4 items-center bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm group cursor-pointer border-4 ${isThisLgbtqTour ? 'border-pride-purple/30 bg-gradient-to-r from-white to-purple-50 dark:from-slate-800 dark:to-purple-950/20' : 'border-slate-100 dark:border-slate-700'} hover:border-primary/20" onclick="showVenueDetail(${JSON.stringify(t).replace(/"/g,'&quot;')}, '${data.name.replace(/'/g, "\\'")}', 'resultsView')">
                                         ${isThisLgbtqTour ? '<div class="text-2xl leading-none flex-shrink-0 select-none" title="LGBTQ+ Tour">🏳️‍🌈</div>' : ''}
                                         <div class="flex-1 min-w-0">
                                             <div class="flex items-center gap-2 mb-0.5 flex-wrap">
