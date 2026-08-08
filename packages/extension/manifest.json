@@ -17,7 +17,8 @@
     "https://*.googleapis.com/*",
     "https://*.firebaseio.com/*",
     "https://pride-scout-26f4e.firebaseapp.com/*",
-    "https://www.gstatic.com/firebasejs/*"
+    "https://www.gstatic.com/firebasejs/*",
+    "https://out-atlas-extension.vercel.app/*"
   ],
   "commands": {
     "_execute_side_panel": {
