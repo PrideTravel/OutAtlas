@@ -1566,7 +1566,17 @@ document.head.appendChild(_faStyle);
                 } else {
                     try {
                         console.log('[OutAtlas] Fetching destinations.json...');
-                        const response = await fetch(chrome.runtime.getURL('destinations.json'));
+                        const CDN_URL = 'https://out-atlas-extension.vercel.app/destinations.json';
+                        let response;
+                        try {
+                            response = await fetch(CDN_URL, { signal: AbortSignal.timeout(5000) });
+                        } catch (_) {
+                            response = null;
+                        }
+                        if (!response || !response.ok) {
+                            console.log('[OutAtlas] CDN unavailable, using bundled file');
+                            response = await fetch(chrome.runtime.getURL('destinations.json'));
+                        }
                         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                         data = await response.json();
                     } catch (error) {
